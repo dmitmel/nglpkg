@@ -1,0 +1,4 @@
+#!/bin/sh
+# NGLPKG bootstrap script - this & PROGRAM.cmd are CC0
+export LUA_CPATH="`dirname $0`/`uname -sm`/?.so"
+"`dirname $0`/`uname -sm`/luajit" "`dirname $0`/binary" $*
