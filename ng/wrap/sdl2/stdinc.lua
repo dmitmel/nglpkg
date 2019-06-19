@@ -1,5 +1,5 @@
 ng.module(
-	"ng.wrap.sdl2.stdinc"
+	"ng.wrap.sdl2.stdinc",
 	"ng.wrap.sdl2.base"
 )
 

@@ -3,10 +3,10 @@
 
 local args = {...}
 
+package.path = args[1]
+
 require("ng.boot")
 require("ng.boot-bake")
-
-package.path = args[1]
 
 for i = 2, #args do
 	ng.bakeModule(args[i])
