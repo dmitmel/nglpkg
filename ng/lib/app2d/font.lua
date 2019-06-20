@@ -481,6 +481,9 @@ line(1,7,1,19)
 line(9,15,9,3)
 return 13
 end
+if char == 9 then
+return 33
+end
 if char == 122 then
 line(1,9,13,9)
 line(13,9,13,11)
