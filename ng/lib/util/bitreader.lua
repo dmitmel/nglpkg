@@ -1,5 +1,6 @@
 ng.module(
-	"ng.lib.util.bitreader"
+	"ng.lib.util.bitreader",
+	"ng.wrap.ffi"
 )
 
 -- str: The actual byte data.
@@ -8,7 +9,6 @@ ng.module(
 --      This is the order in which data is usually written.
 --      If true, bits are stored in the bottom (least-significant-bit) bit, upwards.
 function ng.BitReader(str, lsb)
-	local ffi = require("ffi")
 	local stra = ffi.cast("uint8_t*", str)
 	local strc = #str
 	local power = 0

@@ -1,6 +1,7 @@
+-- Use LUA_PATH and LUA_CPATH.
+
 local args = {...}
 
-package.path = table.remove(args, 1)
 local app = table.remove(args, 1)
 
 require("ng.boot")
