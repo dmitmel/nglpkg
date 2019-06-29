@@ -1,11 +1,18 @@
 This program uses LuaJIT, which in turn uses Lua 5.1/5.2 and dlmalloc.
+
 The build used was downloaded 
- from https://github.com/luapower/luajit/archive/master.zip ,
- but the specific version should be
+ from https://github.com/luapower/luajit/archive/master.zip
+
+Theoretically, the specific version would be
  https://github.com/luapower/luajit/archive/2.1.0-beta2.zip
+
+They force-pushed the binaries out of existence.
+A reliable archive I can find is:
+ https://github.com/earl/luajit/tree/fdb362b0092b3866dc040ce8bfb4ea697f26b41b
 
 Unnecessary files have been removed, and a single byte in both Windows EXEs has been changed,
  to change the subsystem from CUI to GUI.
+ It's at 0xDC, changed from 0x02 to 0x03.
 
 Files specific to the LuaPower packaging have been omitted,
  and their licensing appears uncertain anyway.
