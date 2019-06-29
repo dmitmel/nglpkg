@@ -12,7 +12,7 @@ A reliable archive I can find is:
 
 Unnecessary files have been removed, and a single byte in both Windows EXEs has been changed,
  to change the subsystem from CUI to GUI.
- It's at 0xDC, changed from 0x02 to 0x03.
+ It's at 0xDC, changed from 0x03 to 0x02.
 
 Files specific to the LuaPower packaging have been omitted,
  and their licensing appears uncertain anyway.

@@ -20,11 +20,15 @@ function ng.app2d.main(appClass, frameTime)
 	ng.app2d.running = true
 
 	ng.app2d.instance = appClass()
+	ng.sdl2.SDL_EventState(ng.sdl2Enums.SDL_DROPFILE, 1)
 
 	local function sdlPoller()
 		local event = ffi.new("SDL_Event")
 		while ng.sdl2.SDL_PollEvent(event) ~= 0 do
 			ng.app2d.instance:event(event)
+			if event.type == ng.sdl2Enums.SDL_DROPFILE then
+				ng.sdl2.SDL_free(event.drop.file)
+			end
 		end
 	end
 	ng.polls[sdlPoller] = true

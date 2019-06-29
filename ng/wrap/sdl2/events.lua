@@ -6,6 +6,12 @@ ng.module(
 
 ng.sdl2Enums.enums("SDL_", {"RELEASED", "PRESSED"})
 
+-- SDL_EventState
+ng.sdl2Enums.SDL_QUERY = -1
+ng.sdl2Enums.SDL_IGNORE = 0
+ng.sdl2Enums.SDL_DISABLE = 0
+ng.sdl2Enums.SDL_ENABLE = 1
+
 -- Moved from video.lua
 ng.sdl2Enums.enums("SDL_WINDOWEVENT_", {
 	"NONE", "SHOWN", "HIDDEN", "EXPOSED", "MOVED", "RESIZED", "SIZE_CHANGED", "MINIMIZED", "MAXIMIZED",
@@ -140,6 +146,7 @@ ffi.cdef[[
 		uint8_t padding[56];
 	} SDL_Event;
 	int SDL_PollEvent(SDL_Event * event);
+	uint8_t SDL_EventState(uint32_t type, int state);
 	int SDL_WaitEvent(SDL_Event * event);
 	int SDL_WaitEventTimeout(SDL_Event * event, int timeout);
 	void SDL_StartTextInput();
