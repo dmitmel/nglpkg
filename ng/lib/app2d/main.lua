@@ -8,6 +8,10 @@ ng.module(
 	"ng.lib.util.polling-station"
 )
 
+function ng.app2d.isQuit(event)
+	return (event.type == ng.sdl2Enums.SDL_QUIT) or ((event.type == ng.sdl2Enums.SDL_WINDOWEVENT) and (event.window.event == ng.sdl2Enums.SDL_WINDOWEVENT_CLOSE))
+end
+
 -- This is the main loop for app2d.
 -- The application class is a function that returns a table of form:
 -- {

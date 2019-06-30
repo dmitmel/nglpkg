@@ -95,6 +95,7 @@ ng.bakeModule = function (mod)
 		return
 	end
 	ng.bakingModules[mod] = true
+	-- Also see boot.lua
 	local fun = ng.optRequire(mod .. "-selector")
 	if fun then
 		ng.bakeModule(fun(ng.bakeModules))

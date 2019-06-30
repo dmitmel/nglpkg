@@ -1,6 +1,0 @@
-#!/bin/sh
-# Assists in environment setup
-export LUA_PATH="$LUA_PATH;`dirname $0`/?.lua"
-export LUA_CPATH="$LUA_CPATH;`dirname $0`/reference/`uname -sm`/?.so"
-"`dirname $0`/reference/`uname -sm`/luajit" $*
-

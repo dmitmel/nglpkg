@@ -1,0 +1,10 @@
+#!/bin/sh
+# Assists in environment setup
+echo "#!/bin/sh" > sdk
+SDK=`readlink -m "\`dirname $0\`"`
+echo "PRJ=\`readlink -m \"\\\`dirname $0\\\`\"\`" >> sdk
+echo "export LUA_PATH=\"\`dirname \$0\`/?.lua;$SDK/?.lua\"" >> sdk
+echo "export LUA_CPATH=\"$SDK/reference/\`uname -sm\`/?.so\"" >> sdk
+echo "\"$SDK/reference/\`uname -sm\`/luajit\" \"$SDK/sdk.lua\" \"\$PRJ\" \"$SDK\" \$*" >> sdk
+chmod +x sdk
+echo "installed for target $SDK"

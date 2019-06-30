@@ -18,6 +18,7 @@ ng = {
 	end,
 	_import = function (name, reason)
 		if not ng._modules[name] then
+			-- Also see boot-bake.lua
 			local fun = ng.optRequire(name .. "-selector")
 			if fun then
 				ng._import(fun(ng._modules), " (selected) " .. reason)

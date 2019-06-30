@@ -205,9 +205,9 @@ ng.createGL = function (getProcAddress)
 	-- # Meta
 	f("void", "glEnable", "int", "cap")
 	-- Enables a 'server-side' OpenGL capability.
-	--  One of: GL_ALPHA_TEST, GL_BLEND, GL_CLIP_PLANE0 + x,
+	--  One of: GL_ALPHA_TEST, GL_DEPTH_TEST, GL_STENCIL_TEST, GL_SCISSOR_TEST, GL_BLEND, GL_CLIP_PLANE0 + x,
 	--  GL_VERTEX_PROGRAM_POINT_SIZE, GL_VERTEX_PROGRAM_TWO_SIDE,
-	--  GL_LINE_STIPPLE
+	--  GL_LINE_STIPPLE, GL_CULL_FACE
 	f("void", "glDisable", "int", "cap")
 	--  Disables a 'server-side' OpenGL capability. See glEnable for a list.
 	f("void", "glFlush")

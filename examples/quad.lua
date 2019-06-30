@@ -28,7 +28,7 @@ function QuadAppClass()
 	end
 	-- draw2d interface...
 	function app:event(event)
-		if event.type == ng.sdl2Enums.SDL_QUIT then
+		if ng.app2d.isQuit(event) then
 			ng.app2d.running = false
 		end
 	end

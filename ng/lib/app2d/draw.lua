@@ -12,6 +12,7 @@ ng.resource(
 )
 
 -- This part's the awful bit
+-- If you avoid importing this mess, the rest of ng.app2d can be used for 3D applications.
 
 table.insert(ng.app2d.ctxInitializers, function ()
 	local w = ng.app2d.current
