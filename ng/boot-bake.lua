@@ -1,6 +1,7 @@
 ng.module(
 	"ng.boot-bake",
-	"ng.lib.util.finder"
+	"ng.lib.util.finder",
+	"ng.atexit"
 )
 
 -- Start off by defining the baking framework.
@@ -20,41 +21,59 @@ ng.bakingDirectives = {
 	end
 }
 
--- This set controls compression.
-
-local function resetCompression()
-	ng.bakePrint = function (text, nonewline)
-		if nonewline then
-			io.write(text)
-		else
-			print(text)
+-- Output, compression, "session control"
+function ng.bakeBegin(rootScheme)
+	ng.bakeBegin = nil
+	-- This contains all of the hidden state behind baking output & compression.
+	-- This is the replacement ng.boot & ng.args = {...}
+	local rootSchemeData = "ng={args={...}}"
+	local cSchemeData = nil
+	local cScheme = nil
+	-- Actual functions used during bake
+	ng.bakeCompression = function (scheme)
+		-- Get rid of any existing compression scheme
+		if cScheme then
+			local oldScheme = cScheme
+			local oldSchemeData = cSchemeData
+			-- Has to happen before or the scheme would output to itself, which is of course bad...
+			cScheme = nil
+			cSchemeData = nil
+			oldScheme(oldSchemeData)
+		end
+		-- Load in the new one
+		if scheme then
+			cScheme = scheme
+			cSchemeData = ""
 		end
 	end
-	ng.bakeEnd = function ()
-	end
-end
-
-resetCompression()
-
-ng.bakeCompression = function (scheme)
-	ng.bakeEnd()
-	local allText = ""
 	ng.bakePrint = function (text, nonewline)
-		if nonewline then
-			allText = allText .. text
+		if not nonewline then
+			text = text .. "\n"
+		end
+		if not cScheme then
+			rootSchemeData = rootSchemeData .. text
 		else
-			allText = allText .. text .. "\n"
+			cSchemeData = cSchemeData .. text
 		end
 	end
+	-- End of bake stuff
 	ng.bakeEnd = function ()
-		resetCompression()
-		scheme(allText)
+		ng.bakeEnd = nil
+		ng.atexit("ng._bakeFinish()")
+		-- Delayed until the actual end of the program (ng.Z())
+		ng._bakeFinish = function ()
+			ng._bakeFinish = nil
+			-- Remove support for compression (cannot use compression modules past this point, cSchemeData is locked to nil)
+			local bc = ng.bakeCompression
+			ng.bakeCompression = nil
+			bc(nil)
+			-- Remove support for printing (ng.bakeModule will always error past this point, rootSchemeData is finalized)
+			ng.bakePrint = nil
+			-- Code cannot possibly try to restart baking, so we're ready to pass control to the output scheme
+			rootScheme(rootSchemeData)
+		end
 	end
 end
-
--- This is the replacement ng.boot & ng.args = {...}
-
-ng.bakePrint("ng={args={...}}", true)
 
 -- Module importing
 

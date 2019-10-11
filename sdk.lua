@@ -19,7 +19,12 @@ do
 	if args[1] == "help" or not args[1] then
 		print("NGLPKG SDK: " .. NGLPKG_SDK)
 		print("Project: " .. PROJECT_DIR)
-		print("ng.bake")
+		print("")
+		print("Usage:")
+		print(" sdk <module> <args...>")
+		print("  Runs the given module with the given arguments.")
+		print("")
+		print("See README.md for further information.")
 	else
 		-- Just a normal NG application testing lifecycle (regardless of if it's actually an NG module or not, see: ng.bake)
 		require("ng.boot")

@@ -21,9 +21,21 @@ It will attempt to require `nglpkg-settings` (which can't be an ng-style module)
 
 This is important for baking purposes, ensuring that no 'real' ng modules have been required yet.
 
+### sdk examples.quad-all
+
+Runs the `examples.quad-all` application.
+
+You can substitute `examples.quad-all` for any other module.
+
+This is, for example, a way to test your own applications.
+
 ### sdk ng.bake <modules...>
 
 Bakes a module tree. Expects standard output to be willing to accept some binary in the resulting Lua code, so have a file ready.
+
+### sdk ng.bake-file <file> <modules...>
+
+Same as the ordinary ng.bake, but more compatible with environments that don't like binary data on standard output.
 
 ## How To Make A Buildscript
 
