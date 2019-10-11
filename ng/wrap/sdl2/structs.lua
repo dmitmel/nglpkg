@@ -14,10 +14,10 @@ ffi.cdef[[
 	typedef struct {
 		int x, y, w, h;
 	} SDL_Rect;
-	int SDL_HasIntersection(const SDL_Rect * a, const SDL_Rect * b);
-	int SDL_IntersectRect(const SDL_Rect * a, const SDL_Rect * b, SDL_Rect * o);
-	void SDL_UnionRect(const SDL_Rect * a, const SDL_Rect * b, SDL_Rect * o);
-	int SDL_IntersectRectAndLine(const SDL_Rect * r, int * xa, int * ya, int * xb, int * yb);
+	int SDL_HasIntersection(const SDL_Rect *, const SDL_Rect *);
+	int SDL_IntersectRect(const SDL_Rect *, const SDL_Rect *, SDL_Rect *);
+	void SDL_UnionRect(const SDL_Rect *, const SDL_Rect *, SDL_Rect *);
+	int SDL_IntersectRectAndLine(const SDL_Rect *, int *, int *, int *, int *);
 ]]
 
 ng.sdl2Enums.enums("SDL_RWOPS_", {
@@ -29,10 +29,10 @@ ng.sdl2Enums.enums("RW_SEEK_", {
 
 ffi.cdef[[
 	typedef struct {
-		int64_t ( * size) (void * self);
-		int64_t ( * seek) (void * self, int64_t offset, int whence);
-		size_t ( * read) (void * self, void * ptr, size_t size, size_t maxnum);
-		size_t ( * write) (void * self, void * ptr, size_t size, size_t maxnum);
+		int64_t (*size) (void *);
+		int64_t (*seek) (void *, int64_t, int);
+		size_t (*read) (void *, void *, size_t, size_t);
+		size_t (*write) (void *, void *, size_t, size_t);
 		int ( * close) (void * self);
 		uint32_t type;
 		union {
@@ -45,11 +45,11 @@ ffi.cdef[[
 			} unknown;
 		};
 	} SDL_RWops;
-	SDL_RWops * SDL_RWFromFile(const char * file, const char * mode);
-	SDL_RWops * SDL_RWFromMem(void * mem, int size);
-	SDL_RWops * SDL_RWFromConstMem(const void * mem, int size);
-	SDL_RWops * SDL_AllocRW(SDL_RWops * file);
-	void SDL_FreeRW(SDL_RWops * file);
+	SDL_RWops * SDL_RWFromFile(const char *, const char *);
+	SDL_RWops * SDL_RWFromMem(void *, int);
+	SDL_RWops * SDL_RWFromConstMem(const void *, int);
+	SDL_RWops * SDL_AllocRW(SDL_RWops *);
+	void SDL_FreeRW(SDL_RWops *);
 ]]
 
 ffi.cdef[[
@@ -71,16 +71,16 @@ ffi.cdef[[
 		int refcount;
 	} SDL_Surface;
 
-	SDL_Surface * SDL_CreateRGBSurface(uint32_t flags, int w, int h, int depth, uint32_t rm, uint32_t gm, uint32_t bm, uint32_t am);
-	SDL_Surface * SDL_CreateRGBSurfaceFrom(void * pixels, int w, int h, int depth, int pitch, uint32_t rmask, uint32_t gmask, uint32_t bmask, uint32_t amask);
-	int SDL_LockSurface(SDL_Surface * surface);
-	void SDL_UnlockSurface(SDL_Surface * surface);
-	int SDL_FillRect(SDL_Surface * dst, const SDL_Rect * tgt, uint32_t col);
-	int SDL_UpperBlit(SDL_Surface * src, const SDL_Rect * srcr, SDL_Surface * dst, SDL_Rect * dstr);
-	int SDL_UpperBlitScaled(SDL_Surface * src, const SDL_Rect * srcr, SDL_Surface * dst, SDL_Rect * dstr);
-	int SDL_SetSurfaceBlendMode(SDL_Surface * surface, int mode);
-	void SDL_FreeSurface(SDL_Surface * surface);
-	SDL_Surface * SDL_LoadBMP_RW(SDL_RWops * src, int freesrc);
+	SDL_Surface * SDL_CreateRGBSurface(uint32_t, int, int, int, uint32_t, uint32_t, uint32_t, uint32_t);
+	SDL_Surface * SDL_CreateRGBSurfaceFrom(void *, int, int, int, int, uint32_t, uint32_t, uint32_t, uint32_t);
+	int SDL_LockSurface(SDL_Surface *);
+	void SDL_UnlockSurface(SDL_Surface *);
+	int SDL_FillRect(SDL_Surface *, const SDL_Rect *, uint32_t);
+	int SDL_UpperBlit(SDL_Surface *, const SDL_Rect *, SDL_Surface *, SDL_Rect *);
+	int SDL_UpperBlitScaled(SDL_Surface *, const SDL_Rect *, SDL_Surface *, SDL_Rect *);
+	int SDL_SetSurfaceBlendMode(SDL_Surface *, int);
+	void SDL_FreeSurface(SDL_Surface *);
+	SDL_Surface * SDL_LoadBMP_RW(SDL_RWops *, int);
 ]]
 ng.sdl2Enums.SDL_BLENDMODE_NONE = 0
 ng.sdl2Enums.SDL_BLENDMODE_BLEND = 1

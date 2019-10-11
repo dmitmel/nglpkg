@@ -3,7 +3,8 @@ ng.module(
 	"ng.wrap.sdl2.base"
 )
 
--- Lots of stuff missing here. Partially intentional.
+--- SDL_thread (STATE: Lots of stuff missing from this wrapper. Partially intentional.)
+
 ffi.cdef[[
 	typedef int (*SDL_ThreadFunction)(void *);
 	void * SDL_CreateThread(SDL_ThreadFunction, const char *, void *);

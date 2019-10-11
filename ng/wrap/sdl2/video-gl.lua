@@ -4,6 +4,8 @@ ng.module(
 	"ng.wrap.sdl2.base"
 )
 
+--- SDL_video (GL) (STATE: Probably complete per 2.0.10+dfsg1-1ubuntu1 )
+
 ffi.cdef[[
 	typedef void* SDL_GLContext;
 
@@ -37,5 +39,6 @@ ng.sdl2Enums.enums("SDL_GL_", {
 -- Values for some GL attributes
 ng.sdl2Enums.flags("SDL_GL_CONTEXT_PROFILE_", {"CORE", "COMPATIBILITY", "ES"})
 ng.sdl2Enums.flags("SDL_GL_CONTEXT_", {"DEBUG_FLAG", "FORWARD_COMPATIBLE_FLAG", "ROBUST_ACCESS_FLAG", "RESET_ISOLATION_FLAG"})
--- release & reset notification flags not included
+ng.sdl2Enums.flags("SDL_GL_CONTEXT_RELEASE_BEHAVIOR_", {"NONE", "FLUSH"})
+ng.sdl2Enums.flags("SDL_GL_CONTEXT_RESET_", {"NO_NOTIFICATION", "LOSE_CONTEXT"})
 

@@ -28,13 +28,13 @@ ffi.cdef[[
 	SDL_Window * SDL_CreateWindow(const char *, int, int, int, int, uint32_t);
 	void SDL_DestroyWindow(SDL_Window *);
 
-	void SDL_SetWindowIcon(SDL_Window * window, SDL_Surface * surf);
-	void SDL_SetWindowTitle(SDL_Window * window, const char * title);
+	void SDL_SetWindowIcon(SDL_Window *, SDL_Surface *);
+	void SDL_SetWindowTitle(SDL_Window *, const char *);
 	void SDL_SetWindowGrab(SDL_Window *, int);
 	void SDL_SetWindowFullscreen(SDL_Window *, uint32_t);
 
-	uint32_t SDL_GetWindowID(SDL_Window * window);
-	SDL_Window * SDL_GetWindowFromID(uint32_t id);
+	uint32_t SDL_GetWindowID(SDL_Window *);
+	SDL_Window * SDL_GetWindowFromID(uint32_t);
 
 	SDL_Surface * SDL_GetWindowSurface(SDL_Window *);
 	int SDL_UpdateWindowSurface(SDL_Window *);

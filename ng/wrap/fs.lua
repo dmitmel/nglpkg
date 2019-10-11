@@ -37,16 +37,16 @@ if (not ng.fs.list) and ffi.os == "Windows" then
 			uint32_t fileType, creatorTime;
 			uint16_t finderFlags;
 		} WIN32_FIND_DATA;
-		void * __stdcall FindFirstFileW(uint16_t * fileName, WIN32_FIND_DATA * findData);
-		int __stdcall FindNextFileW(void * handle, WIN32_FIND_DATA * findData);
-		int __stdcall FindClose(void * handle);
+		void * __stdcall FindFirstFileW(uint16_t *, WIN32_FIND_DATA *);
+		int __stdcall FindNextFileW(void *, WIN32_FIND_DATA *);
+		int __stdcall FindClose(void *);
 		uint32_t GetLastError();
 
-		int __stdcall CreateDirectoryW(uint16_t * fileName, void * zro);
-		int __stdcall RemoveDirectoryW(uint16_t * filename);
-		int __stdcall DeleteFileW(uint16_t * filename);
+		int __stdcall CreateDirectoryW(uint16_t *, void *);
+		int __stdcall RemoveDirectoryW(uint16_t *);
+		int __stdcall DeleteFileW(uint16_t *);
 
-		int __stdcall GetFileAttributesW(uint16_t * filename);
+		int __stdcall GetFileAttributesW(uint16_t *);
 	]]
 	ng.fs.list = function (n)
 		if n:find("[?*]") then
@@ -117,13 +117,13 @@ elseif (not ng.fs.list) then
 	--  first 7 fields of stat. device, inode, mode, links, uid, gid, rdev.
 	local config = {
 		cdef = {
-			opendir = "void * opendir(const char * name)",
-			readdir = "kacol_dirent * readdir(void * d)",
-			closedir = "int closedir(void * d)",
-			mkdir = "int mkdir(const char * name, int mode)",
-			rmdir = "int rmdir(const char * name)",
-			unlink = "int unlink(const char * name)",
-			stat = "int stat(const char * name, kacol_stat * stt)"
+			opendir = "void * opendir(const char *)",
+			readdir = "kacol_dirent * readdir(void *)",
+			closedir = "int closedir(void *)",
+			mkdir = "int mkdir(const char *, int)",
+			rmdir = "int rmdir(const char *)",
+			unlink = "int unlink(const char *)",
+			stat = "int stat(const char *, kacol_stat *)"
 		},
 		get_opendir = function () return ffi.C.opendir end,
 		get_readdir = function () return ffi.C.readdir end,
@@ -142,7 +142,7 @@ elseif (not ng.fs.list) then
 
 	if ffi.os == "Linux" and (ffi.arch == "x86" or ffi.arch == "x64") then
 		-- glibc's fault - there's no other way to access this.
-		config.cdef.stat = "int __xstat(int v, const char * name, kacol_stat * stt)"
+		config.cdef.stat = "int __xstat(int, const char *, kacol_stat *)"
 		local statxv
 		if ffi.arch == "x86" then
 			config.stat_st_mode_ofs = 0x10

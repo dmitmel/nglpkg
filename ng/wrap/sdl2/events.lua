@@ -17,6 +17,9 @@ ng.sdl2Enums.enums("SDL_WINDOWEVENT_", {
 	"NONE", "SHOWN", "HIDDEN", "EXPOSED", "MOVED", "RESIZED", "SIZE_CHANGED", "MINIMIZED", "MAXIMIZED",
 	"RESTORED", "ENTER", "LEAVE", "FOCUS_GAINED", "FOCUS_LOST", "CLOSE", "TAKE_FOCUS", "HIT_TEST"
 })
+ng.sdl2Enums.enums("SDL_DISPLAYEVENT_", {
+	"NONE", "ORIENTATION"
+})
 
 -- NOTE: This is not a complete listing! Several OS-specific events are missing.
 -- Where the blanks are, --<SNIP>-- will be put.
@@ -145,10 +148,10 @@ ffi.cdef[[
 		SDL_DropEvent drop;
 		uint8_t padding[56];
 	} SDL_Event;
-	int SDL_PollEvent(SDL_Event * event);
-	uint8_t SDL_EventState(uint32_t type, int state);
-	int SDL_WaitEvent(SDL_Event * event);
-	int SDL_WaitEventTimeout(SDL_Event * event, int timeout);
+	int SDL_PollEvent(SDL_Event *);
+	uint8_t SDL_EventState(uint32_t, int);
+	int SDL_WaitEvent(SDL_Event *);
+	int SDL_WaitEventTimeout(SDL_Event *, int);
 	void SDL_StartTextInput();
 	void SDL_StopTextInput();
 ]]

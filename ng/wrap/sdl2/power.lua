@@ -8,6 +8,6 @@ ng.sdl2Enums.enums("SDL_POWERSTATE_", {
 })
 
 ffi.cdef[[
-	int SDL_GetPowerInfo(int * secondsLeft, int * percentLeft);
+	int SDL_GetPowerInfo(int *, int *);
 ]]
 

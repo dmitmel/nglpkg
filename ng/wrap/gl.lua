@@ -192,23 +192,25 @@ ng.createGL = function (getProcAddress)
 	local function f(rt, n, ...)
 		local tp = rt .. " (*) ("
 		local args = {...}
-		for i = 1, #args - 1, 2 do
+		for i = 1, #args do
 			if i ~= 1 then
 				tp = tp .. ", "
 			end
-			tp = tp .. args[i] .. " " .. args[i + 1]
+			tp = tp .. args[i]
 		end
 		tp = tp .. ")"
 		ictx[n] = ffi.cast(tp, getProcAddress(n))
 	end
 
 	-- # Meta
-	f("void", "glEnable", "int", "cap")
+	f("void", "glEnable", "int")
+	-- cap
 	-- Enables a 'server-side' OpenGL capability.
 	--  One of: GL_ALPHA_TEST, GL_DEPTH_TEST, GL_STENCIL_TEST, GL_SCISSOR_TEST, GL_BLEND, GL_CLIP_PLANE0 + x,
 	--  GL_VERTEX_PROGRAM_POINT_SIZE, GL_VERTEX_PROGRAM_TWO_SIDE,
 	--  GL_LINE_STIPPLE, GL_CULL_FACE
-	f("void", "glDisable", "int", "cap")
+	f("void", "glDisable", "int")
+	-- cap
 	--  Disables a 'server-side' OpenGL capability. See glEnable for a list.
 	f("void", "glFlush")
 	--  Flushes all buffers, guaranteeing that all GL commands will be done.
@@ -216,30 +218,38 @@ ng.createGL = function (getProcAddress)
 	--  Ensures all GL commands are done before it returns.
 
 	-- # Drawing Target Control
-	f("void", "glGenRenderbuffersEXT", "int", "n", "unsigned int *", "buffers")
+	f("void", "glGenRenderbuffersEXT", "int", "unsigned int *")
+	-- n buffers
 	--  Generate a set of renderbuffer objects.
 	--  Note that renderbuffers act as no-output *substitutes* for textures,
 	--   and are not required if all attachments are to be textures.
-	f("void", "glBindRenderbufferEXT", "int", "target", "unsigned int", "renderbuffer")
+	f("void", "glBindRenderbufferEXT", "int", "unsigned int")
+	-- target renderbuffer
 	--  Binds a renderbuffer to a target, which must be GL_RENDERBUFFER_EXT.
-	f("void", "glDeleteRenderbuffersEXT", "int", "n", "unsigned int *", "buffers")
+	f("void", "glDeleteRenderbuffersEXT", "int", "unsigned int *")
+	-- n buffers
 	--  Delete a set of renderbuffer objects.
 
-	f("void", "glGenFramebuffersEXT", "int", "n", "unsigned int *", "buffers")
+	f("void", "glGenFramebuffersEXT", "int", "unsigned int *")
+	-- n buffers
 	--  Generate a set of framebuffer objects.
-	f("void", "glBindFramebufferEXT", "int", "target", "unsigned int", "renderbuffer")
+	f("void", "glBindFramebufferEXT", "int", "unsigned int")
+	-- target framebuffer
 	--  Binds a framebuffer to a target, which must be GL_FRAMEBUFFER_EXT.
 	--  This changes the target of all drawing functions.
 	--  The framebuffer ID 0 is the primary framebuffer.
-	f("void", "glDeleteFramebuffersEXT", "int", "n", "unsigned int *", "buffers")
+	f("void", "glDeleteFramebuffersEXT", "int", "unsigned int *")
+	-- n buffers
 	--  Delete a set of framebuffer objects.
 
-	f("void", "glRenderbufferStorageEXT", "int", "target", "int", "iformat", "int", "w", "int", "h")
+	f("void", "glRenderbufferStorageEXT", "int", "int", "int", "int")
+	-- target iformat w h
 	--  Sets up a renderbuffer. The target must be GL_RENDERBUFFER_EXT.
 	--  The iformat must be one of:
 	--  GL_RGB, GL_RGBA, GL_DEPTH_COMPONENT, GL_STENCIL_INDEX.
 	--  (It is possible there are other formats - documentation is unclear.)
-	f("void", "glFramebufferRenderbufferEXT", "int", "target1", "int", "at", "int", "target2", "unsigned int", "rb")
+	f("void", "glFramebufferRenderbufferEXT", "int", "int", "int", "unsigned int")
+	-- target1 at target2 rb
 	--  Attaches or detaches a renderbuffer and framebuffer.
 	--  target1 and target2 must be GL_FRAMEBUFFER_EXT and GL_RENDERBUFFER_EXT respectively.
 	--  at is one of:
@@ -248,158 +258,209 @@ ng.createGL = function (getProcAddress)
 	--  Any existing renderbuffer is detached.
 	--  If rb is not 0, then that renderbuffer is attached.
 
-	f("void", "glFramebufferTexture1DEXT", "int", "target1", "int", "at", "int", "target2", "unsigned int", "tex", "int", "level")
+	f("void", "glFramebufferTexture1DEXT", "int", "int", "int", "unsigned int", "int")
+	-- target1 at target2 tex level
 	--  Attaches a given mipmap level of a texture to a framebuffer attachment.
 	--  This works similarly to glFramebufferRenderbufferEXT, with anything attached on the same attachment being detached.
 	--  target1 must be GL_FRAMEBUFFER_EXT, while target2 must be a valid target for the texture (this has importance with cube-map textures).
 	--  at must be a valid attachment as documented in glFramebufferRenderbufferEXT.
 	--  tex must be 0 (to leave detached) or a valid texture.
-	f("void", "glFramebufferTexture2DEXT", "int", "target1", "int", "at", "int", "target2", "unsigned int", "tex", "int", "level")
+	f("void", "glFramebufferTexture2DEXT", "int", "int", "int", "unsigned int", "int")
+	-- target1 at target2 tex level
 	--  See glFramebufferTexture1DEXT.
-	f("void", "glFramebufferTexture3DEXT", "int", "target1", "int", "at", "int", "target2", "unsigned int", "tex", "int", "level", "int", "z")
+	f("void", "glFramebufferTexture3DEXT", "int", "int", "int", "unsigned int", "int", "int")
+	-- target1 at target2 tex level z
 	--  See glFramebufferTexture1DEXT, but as this is part of 2D rendering, a z-offset within the texture is specified as a target.
 
-	f("void", "glDrawBuffer", "int", "buffer")
+	f("void", "glDrawBuffer", "int")
+	-- buffer
 	--  Sets one attachment to output fragment colour to. This is a property of the target framebuffer.
 	--  While there are many specified valid values, the relevant ones are dependent on target.
 	--  For framebuffer 0, GL_NONE, GL_FRONT and GL_BACK are the targets of importance.
 	--  Note that in this case, glDrawBuffers should not be used.
 	--  For user-created framebuffers, GL_NONE and GL_COLO[U]R_ATTACHMENT0_EXT + n are valid where those attachments exist.
-	f("void", "glDrawBuffers", "int", "count", "const int *", "buffers")
+	f("void", "glDrawBuffers", "int", "const int *")
+	-- count buffers
 	--  Sets the attachments to output fragment colour to. For further information, see glDrawBuffer.
 
 	-- # Drawing Control
-	f("void", "glAlphaFunc", "int", "func", "float", "ref")
+	f("void", "glAlphaFunc", "int", "float")
+	-- func ref
 	--  Sets the alpha test function to one of
 	--  GL_NEVER, GL_LESS, GL_EQUAL, GL_LEQUAL, GL_GREATER, GL_NOTEQUAL, GL_GEQUAL, GL_ALWAYS
 
-	f("void", "glStencilFunc", "int", "func", "int", "ref", "unsigned int", "andmask")
+	f("void", "glStencilFunc", "int", "int", "unsigned int")
+	-- func ref andmask
 	--  See glStencilFuncSeparate with a target of GL_FRONT_AND_BACK.
-	f("void", "glStencilFuncSeparate", "int", "target", "int", "func", "int", "ref", "unsigned int", "andmask")
+	f("void", "glStencilFuncSeparate", "int", "int", "int", "unsigned int")
+	-- target func ref andmask
 	--  Updates one of: GL_FRONT, GL_BACK, or both (GL_FRONT_AND_BACK) stencil test functions to one of the comparison operators (see glAlphaFunc)
 
-	f("void", "glStencilMask", "unsigned int", "mask")
+	f("void", "glStencilMask", "unsigned int")
+	-- mask
 	--  See glStencilMaskSeparate with a target of GL_FRONT_AND_BACK.
-	f("void", "glStencilMaskSeparate", "int", "target", "unsigned int", "mask")
+	f("void", "glStencilMaskSeparate", "int", "unsigned int")
+	-- target mask
 	--  Updates one of: GL_FRONT, GL_BACK, or both (GL_FRONT_AND_BACK) stencil masks, controlling which bits can be written to.
 
-	f("void", "glStencilOp", "int", "sfail", "int", "dpfail", "int", "dppass")
+	f("void", "glStencilOp", "int", "int", "int")
+	-- sfail dpfail dppass
 	--  See glStencilOpSeparate, with target GL_FRONT_AND_BACK.
-	f("void", "glStencilOpSeparate", "int", "face", "int", "sfail", "int", "dpfail", "int", "dppass")
+	f("void", "glStencilOpSeparate", "int", "int", "int", "int")
+	-- face sfail dpfail dppass
 	--  Sets the stencil write operation.
 	--  sfail/dpfail/dppass are the different operations for different cases.
 	--  They can be one of: GL_KEEP, GL_ZERO, GL_REPLACE, GL_INCR, GL_INCR_WRAP, GL_DECR, GL_DECR_WRAP, and GL_INVERT.
 
-	f("void", "glDepthMask", "int", "flag")
+	f("void", "glDepthMask", "int")
+	-- flag
 	--  Enables (!= 0) or disables (== 0) depth writing.
-	f("void", "glColorMask", "int", "r", "int", "g", "int", "b", "int", "a")
+	f("void", "glColorMask", "int", "int", "int", "int")
+	-- r g b a
 	--  Enables (!= 0) or disables (== 0) colour writing to various channels.
 	--  Can also be referred to as glColourMask.
 	ictx.glColourMask = ictx.glColorMask
 
-	f("void", "glBlendFunc", "int", "sfactor", "int", "dfactor")
+	f("void", "glBlendFunc", "int", "int")
+	-- sfactor dfactor
 	--  Sets the source & destination blending factors. Factors can be any of
 	--  GL_ZERO, GL_ONE,
 	--  GL_SRC_COLO[U]R, GL_DST_COLO[U]R, GL_SRC_ALPHA, GL_DST_ALPHA,
 	--  GL_ONE_MINUS_SRC_COLO[U]R, GL_ONE_MINUS_DST_COLO[U]R, GL_ONE_MINUS_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA,
 	--  GL_CONSTANT_COLO[U]R, GL_ONE_MINUS_CONSTANT_COLO[U]R, GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA, GL_SRC_ALPHA_SATURATE
-	f("void", "glBlendFuncSeparate", "int", "rgbs", "int", "rgbd", "int", "as", "int", "ad")
+	f("void", "glBlendFuncSeparate", "int", "int", "int", "int")
+	-- rgbs rgbd as ad
 	--  Sets the source & destination blending factors for both RGB and alpha.
 	--  See glBlendFunc for available factors.
-	f("void", "glBlendColor", "float", "r", "float", "g", "float", "b", "float", "a")
+	f("void", "glBlendColor", "float", "float", "float", "float")
+	-- r g b a
 	--  Sets the blending constant colour. The RGBA values given here are from 0 to 1.
 	--  Can also be referred to as glBlendColour.
 	ictx.glBlendColour = ictx.glBlendColor
-	f("void", "glBlendEquation", "int", "mode")
+	f("void", "glBlendEquation", "int")
+	-- mode
 	--  Sets the blending equation to one of: GL_FUNC_ADD, GL_FUNC_SUBTRACT, GL_FUNC_REVERSE_SUBTRACT, GL_MIN, GL_MAX.
 
-	f("void", "glCullFace", "int", "mode")
+	f("void", "glCullFace", "int")
+	-- mode
 	--  Sets the culling mode to one of: GL_FRONT, GL_BACK, GL_FRONT_AND_BACK.
 	--  GL_BACK is the initial value.
 	--  You need to enable GL_CULL_FACE to use this.
-	f("void", "glFrontFace", "int", "mode")
+	f("void", "glFrontFace", "int")
+	-- mode
 	--  Sets the definition of 'front face' to one of: GL_CW, GL_CCW.
 	--  GL_CW is the initial value.
-	f("void", "glLineWidth", "float", "width")
+	f("void", "glLineWidth", "float")
+	-- width
 	--  Sets the line width.
-	f("void", "glLineStipple", "int", "factor", "unsigned short", "pattern")
+	f("void", "glLineStipple", "int", "unsigned short")
+	-- factor pattern
 	--  Sets a line stipple pattern. You need to enable GL_LINE_STIPPLE to use this.
-	f("void", "glViewport", "int", "x", "int", "y", "int", "width", "int", "height")
+	f("void", "glViewport", "int", "int", "int", "int")
+	-- x y width height
 	--  Sets the scaling used from normalized (-1 to 1) coordinates to window coordinates. Under usual circumstances you should set this to (0, 0, w, h).
-	f("void", "glPolygonOffset", "float", "scale", "float", "units")
+	f("void", "glPolygonOffset", "float", "float")
+	-- scale units
 	--  Alters polygon depth by some amount before the depth test is performed.
-	f("void", "glDepthRange", "double", "near", "double", "far")
+	f("void", "glDepthRange", "double", "double")
+	-- near far
 	--  Sets the range of depth. Depth internally in OpenGL spans -1 (near) to 1 (far), but must be mapped to a different (0 to 1) range for putting into the depth buffer. This changes that range.
-	f("void", "glScissor", "int", "x", "int", "y", "int", "width", "int", "height")
+	f("void", "glScissor", "int", "int", "int", "int")
+	-- x y width height
 	--  Sets the scissor rectangle. You need to enable GL_SCISSOR_TEST to use this.
 
 	-- # Clear
-	f("void", "glClear", "unsigned int", "bufferBits")
+	f("void", "glClear", "unsigned int")
+	-- bufferBits
 	--  Clears the indicated buffers (an OR of GL_*_BUFFER_BIT) to the corresponding current clear values.
-	f("void", "glClearColor", "float", "r", "float", "g", "float", "b", "float", "a")
+	f("void", "glClearColor", "float", "float", "float", "float")
+	-- r g b a
 	--  Sets the colour clear value. The RGBA values given here are from 0 to 1.
 	--  Can also be referred to as glClearColour.
 	ictx.glClearColour = ictx.glClearColor
-	f("void", "glClearDepth", "double", "depth")
+	f("void", "glClearDepth", "double")
+	-- depth
 	--  Sets the depth clear value. Must be in the 0 to 1 range of depth values.
-	f("void", "glClearAccum", "float", "red", "float", "green", "float", "blue", "float", "alpha")
+	f("void", "glClearAccum", "float", "float", "float", "float")
+	-- red green blue alpha
 	--  Sets the accum clear value. The RGBA values given here are from 0 to 1.
-	f("void", "glClearStencil", "int", "s")
+	f("void", "glClearStencil", "int")
+	-- s
 	--  Sets the stencil clear value.
 
 	-- # Shader
 	f("unsigned int", "glCreateProgram")
 	--  Creates a shader program.
-	f("void", "glLinkProgram", "unsigned int", "program")
+	f("void", "glLinkProgram", "unsigned int")
+	-- program
 	--  Links a program object.
-	f("void", "glUseProgram", "unsigned int", "program")
+	f("void", "glUseProgram", "unsigned int")
+	-- program
 	--  Use a program object.
-	f("void", "glGetProgramInfoLog", "unsigned int", "program", "int", "maxLength", "int *", "length", "char *", "infoLog")
+	f("void", "glGetProgramInfoLog", "unsigned int", "int", "int *", "char *")
+	-- program maxLength length infoLog
 	--  Get an info log for a program.
-	f("void", "glGetProgramiv", "unsigned int", "program", "int", "parameter", "int *", "result")
+	f("void", "glGetProgramiv", "unsigned int", "int", "int *")
+	-- program parameter result
 	--  Gets a program object parameter. One of: GL_LINK_STATUS, GL_INFO_LOG_LENGTH
-	f("void", "glDeleteProgram", "unsigned int", "program")
+	f("void", "glDeleteProgram", "unsigned int")
+	-- program
 	--  Deletes a shader program.
 
-	f("unsigned int", "glCreateShader", "int", "type")
+	f("unsigned int", "glCreateShader", "int")
+	-- type
 	--  Creates a shader object.
-	f("void", "glShaderSource", "unsigned int", "shader", "int", "count", "const char **", "string", "const int *", "length")
+	f("void", "glShaderSource", "unsigned int", "int", "const char **", "const int *")
+	-- shader count strings length
 	--  Provides source for a shader object.
-	f("void", "glCompileShader", "unsigned int", "shader")
+	f("void", "glCompileShader", "unsigned int")
+	-- shader
 	--  Compiles a shader object.
-	f("void", "glGetShaderInfoLog", "unsigned int", "shader", "int", "maxLength", "int *", "length", "char *", "infoLog")
+	f("void", "glGetShaderInfoLog", "unsigned int", "int", "int *", "char *")
+	-- shader maxLength length infoLog
 	--  Get an info log for a shader.
-	f("void", "glGetShaderiv", "unsigned int", "shader", "int", "parameter", "int *", "result")
+	f("void", "glGetShaderiv", "unsigned int", "int", "int *")
+	-- shader parameter result
 	--  Gets a shader object parameter. One of: GL_COMPILE_STATUS, GL_INFO_LOG_LENGTH
-	f("void", "glAttachShader", "unsigned int", "program", "unsigned int", "shader")
+	f("void", "glAttachShader", "unsigned int", "unsigned int")
+	-- program shader
 	--  Attach a shader object.
-	f("void", "glDeleteShader", "unsigned int", "shader")
+	f("void", "glDeleteShader", "unsigned int")
+	-- shader
 	--  Deletes a shader object.
 
-	f("int", "glGetAttribLocation", "unsigned int", "program", "const char *", "name")
+	f("int", "glGetAttribLocation", "unsigned int", "const char *")
+	-- program name
 	--  Gets a vertex attribute index for a given program & attribute name.
-	f("int", "glGetUniformLocation", "unsigned int", "program", "const char *", "name")
+	f("int", "glGetUniformLocation", "unsigned int", "const char *")
+	-- program name
 	--  Gets a uniform index for a given program & uniform name.
 
 	-- # Shader Uniforms
 	-----
 	local function vau(pfx, tp, tpc, tpl)
-		f("void", "gl" .. pfx .. "1" .. tpc, tpl, "location", tp, "v0")
-		f("void", "gl" .. pfx .. "2" .. tpc, tpl, "location", tp, "v0", tp, "v1")
-		f("void", "gl" .. pfx .. "3" .. tpc, tpl, "location", tp, "v0", tp, "v1", tp, "v2")
-		f("void", "gl" .. pfx .. "4" .. tpc, tpl, "location", tp, "v0", tp, "v1", tp, "v2", tp, "v3")
+		f("void", "gl" .. pfx .. "1" .. tpc, tpl, tp)
+		-- location v0
+		f("void", "gl" .. pfx .. "2" .. tpc, tpl, tp, tp)
+		-- location v0 v1
+		f("void", "gl" .. pfx .. "3" .. tpc, tpl, tp, tp, tp)
+		-- location v0 v1 v2
+		f("void", "gl" .. pfx .. "4" .. tpc, tpl, tp, tp, tp, tp)
+		-- location v0 v1 v2 v3
 	end
 	local function vav(pfx, tp, tpc, tpl)
-		f("void", "gl" .. pfx .. "1" .. tpc .. "v", tpl, "location", "int", "count", tp, "value")
-		f("void", "gl" .. pfx .. "2" .. tpc .. "v", tpl, "location", "int", "count", tp, "value")
-		f("void", "gl" .. pfx .. "3" .. tpc .. "v", tpl, "location", "int", "count", tp, "value")
-		f("void", "gl" .. pfx .. "4" .. tpc .. "v", tpl, "location", "int", "count", tp, "value")
+		-- location count value
+		f("void", "gl" .. pfx .. "1" .. tpc .. "v", tpl, "int", tp)
+		f("void", "gl" .. pfx .. "2" .. tpc .. "v", tpl, "int", tp)
+		f("void", "gl" .. pfx .. "3" .. tpc .. "v", tpl, "int", tp)
+		f("void", "gl" .. pfx .. "4" .. tpc .. "v", tpl, "int", tp)
 	end
 	local function vax(pfx, tp, tpc, tpl)
-		f("void", "gl" .. pfx .. "1" .. tpc .. "v", tpl, "location", tp, "value")
-		f("void", "gl" .. pfx .. "2" .. tpc .. "v", tpl, "location", tp, "value")
-		f("void", "gl" .. pfx .. "3" .. tpc .. "v", tpl, "location", tp, "value")
-		f("void", "gl" .. pfx .. "4" .. tpc .. "v", tpl, "location", tp, "value")
+		-- location value
+		f("void", "gl" .. pfx .. "1" .. tpc .. "v", tpl, tp)
+		f("void", "gl" .. pfx .. "2" .. tpc .. "v", tpl, tp)
+		f("void", "gl" .. pfx .. "3" .. tpc .. "v", tpl, tp)
+		f("void", "gl" .. pfx .. "4" .. tpc .. "v", tpl, tp)
 	end
 	--+--
 	--? Sets a float or vector uniform.
@@ -410,75 +471,96 @@ ng.createGL = function (getProcAddress)
 	vav("Uniform", "const int *", "i", "int")
 
 	--? Sets a matrix uniform.
-	f("void", "glUniformMatrix2fv", "int", "location", "int", "count", "int", "transpose", "const float *", "value")
+	-- location count transpose value
+	f("void", "glUniformMatrix2fv", "int", "int", "int", "const float *")
 	--=
-	f("void", "glUniformMatrix3fv", "int", "location", "int", "count", "int", "transpose", "const float *", "value")
+	f("void", "glUniformMatrix3fv", "int", "int", "int", "const float *")
 	--=
-	f("void", "glUniformMatrix4fv", "int", "location", "int", "count", "int", "transpose", "const float *", "value")
+	f("void", "glUniformMatrix4fv", "int", "int", "int", "const float *")
 	--=
-	f("void", "glUniformMatrix2x3fv", "int", "location", "int", "count", "int", "transpose", "const float *", "value")
+	f("void", "glUniformMatrix2x3fv", "int", "int", "int", "const float *")
 	--=
-	f("void", "glUniformMatrix3x2fv", "int", "location", "int", "count", "int", "transpose", "const float *", "value")
+	f("void", "glUniformMatrix2x4fv", "int", "int", "int", "const float *")
 	--=
-	f("void", "glUniformMatrix2x4fv", "int", "location", "int", "count", "int", "transpose", "const float *", "value")
+	f("void", "glUniformMatrix3x2fv", "int", "int", "int", "const float *")
 	--=
-	f("void", "glUniformMatrix4x2fv", "int", "location", "int", "count", "int", "transpose", "const float *", "value")
+	f("void", "glUniformMatrix3x4fv", "int", "int", "int", "const float *")
 	--=
-	f("void", "glUniformMatrix3x4fv", "int", "location", "int", "count", "int", "transpose", "const float *", "value")
+	f("void", "glUniformMatrix4x2fv", "int", "int", "int", "const float *")
 	--=
-	f("void", "glUniformMatrix4x3fv", "int", "location", "int", "count", "int", "transpose", "const float *", "value")
+	f("void", "glUniformMatrix4x3fv", "int", "int", "int", "const float *")
 	--=
 
 	-- # Textures
-	f("void", "glGenTextures", "int", "n", "unsigned int *", "buffers")
+	f("void", "glGenTextures", "int", "unsigned int *")
+	-- n buffers
 	--  Generate a set of texture objects.
-	f("void", "glBindTexture", "int", "target", "unsigned int", "buffer")
+	f("void", "glBindTexture", "int", "unsigned int")
+	-- target buffer
 	--  Bind a texture to one of: GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_3D, GL_TEXTURE_CUBE_MAP
-	f("void", "glActiveTexture", "int", "texture")
+	f("void", "glActiveTexture", "int")
+	-- textureUnit
 	--  Set the active texture unit, which must be GL_TEXTURE0 + the texture unit number.
-	f("void", "glTexImage1D", "int", "target", "int", "level", "int", "internalFormat", "int", "width", "int", "border", "int", "format", "int", "type", "void *", "data")
+	f("void", "glTexImage1D", "int", "int", "int", "int", "int", "int", "int", "void *")
+	-- target level internalFormat width border format type data
 	--  Sets up a 1D texture.
-	f("void", "glTexImage2D", "int", "target", "int", "level", "int", "internalFormat", "int", "width", "int", "height", "int", "border", "int", "format", "int", "type", "void *", "data")
+	f("void", "glTexImage2D", "int", "int", "int", "int", "int", "int", "int", "int", "void *")
+	-- target level internalFormat width height border format type data
 	--  Sets up a 2D texture.
-	f("void", "glTexImage3D", "int", "target", "int", "level", "int", "internalFormat", "int", "width", "int", "height", "int", "depth", "int", "border", "int", "format", "int", "type", "void *", "data")
+	f("void", "glTexImage3D", "int", "int", "int", "int", "int", "int", "int", "int", "int", "void *")
+	-- target level internalFormat width height depth border format type data
 	--  Sets up a 3D texture.
-	f("void", "glCopyTexImage1D", "int", "target", "int", "level", "int", "internalFormat", "int", "x", "int", "y", "int", "width", "int", "border")
+	f("void", "glCopyTexImage1D", "int", "int", "int", "int", "int", "int", "int")
+	-- target level internalFormat x y width border
 	--  Sets up a 1D texture from the framebuffer.
-	f("void", "glCopyTexImage2D", "int", "target", "int", "level", "int", "internalFormat", "int", "x", "int", "y", "int", "width", "int", "height", "int", "border")
+	f("void", "glCopyTexImage2D", "int", "int", "int", "int", "int", "int", "int", "int")
+	-- target level internalFormat x y width height border
 	--  Sets up a 2D texture from the framebuffer.
-	f("void", "glTexParameteri", "int", "target", "int", "prop", "int", "value")
+	f("void", "glTexParameteri", "int", "int", "int")
+	-- target prop value
 	--  Sets a texture parameter. Can be one of: GL_TEXTURE_MIN_FILTER, GL_TEXTURE_MAG_FILTER, GL_TEXTURE_MIN_LOD, GL_TEXTURE_MAX_LOD, GL_TEXTURE_BASE_LEVEL, GL_TEXTURE_MAX_LEVEL, GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T, GL_TEXTURE_WRAP_R, GL_TEXTURE_PRIORITY, GL_TEXTURE_COMPARE_MODE, GL_TEXTURE_COMPARE_FUNC, GL_DEPTH_TEXTURE_MODE, GL_GENERATE_MIPMAP
-	f("void", "glTexParameterf", "int", "target", "int", "prop", "float", "value")
+	f("void", "glTexParameterf", "int", "int", "float")
+	-- target prop value
 	--  Sets a texture parameter. See glTexParameteri for available parameters.
-	f("void", "glDeleteTextures", "int", "n", "unsigned int *", "buffers")
+	f("void", "glDeleteTextures", "int", "unsigned int *")
+	-- n buffers
 	--  Delete a set of texture objects.
 	--  Need to handle the other texture things
-	f("void", "glGenerateMipmapEXT", "int", "target")
+	f("void", "glGenerateMipmapEXT", "int")
+	-- target
 	--  Generates the mipmaps for a texture.
 
 	-- # Buffers
-	f("void", "glGenBuffers", "int", "n", "unsigned int *", "buffers")
+	f("void", "glGenBuffers", "int", "unsigned int *")
+	-- n buffers
 	--  Generate a set of buffer objects.
-	f("void", "glBindBuffer", "int", "target", "unsigned int", "buffer")
+	f("void", "glBindBuffer", "int", "unsigned int")
+	-- target buffer
 	--  Bind a buffer a target, one of: GL_ARRAY_BUFFER, GL_ELEMENT_ARRAY_BUFFER.
-	f("void", "glDeleteBuffers", "int", "n", "unsigned int *", "buffers")
+	f("void", "glDeleteBuffers", "int", "unsigned int *")
+	-- n buffers
 	--  Delete a set of buffer objects.
 
-	f("void", "glBufferData", "int", "target", "ptrdiff_t", "size", "const void *", "data", "int", "usage")
+	f("void", "glBufferData", "int", "ptrdiff_t", "const void *", "int")
+	-- target size data usage
 	--  Sets up a buffer. If data is null, the data is uninitialized.
 	--  Usage can be one of GL_STATIC_DRAW, GL_DYNAMIC_DRAW.
-	f("void *", "glMapBuffer", "int", "target", "int", "access")
+	f("void *", "glMapBuffer", "int", "int")
+	-- target access
 	--  Maps a buffer into memory.
 	--  Access mode can be one of: GL_READ_ONLY, GL_WRITE_ONLY, GL_READ_WRITE.
 	--  Can return NULL on error.
 	--  glUnmapBuffer must be used on the buffer before continued use.
-	f("int", "glUnmapBuffer", "int", "target")
+	f("int", "glUnmapBuffer", "int")
+	-- target
 	--  Unmaps a buffer. Must be done before continued use of the buffer.
 
 	-- # Drawing
-	f("void", "glEnableVertexAttribArray", "unsigned int", "index")
+	f("void", "glEnableVertexAttribArray", "unsigned int")
+	-- index
 	--  Enable a vertex attribute array. Note that 0 is vertex position.
-	f("void", "glVertexAttribPointer", "unsigned int", "index", "int", "size", "int", "type", "int", "normalized", "int", "stride", "const void *", "pointer")
+	f("void", "glVertexAttribPointer", "unsigned int", "int", "int", "int", "int", "const void *")
+	-- index size type normalized stride pointer
 	--  Set a vertex attribute pointer.
 	--  If any non-zero buffer is bound, then the pointer is set there - otherwise it points into memory.
 	--  size is the amount of components per vector (1 to 4).
@@ -486,12 +568,15 @@ ng.createGL = function (getProcAddress)
 	--  Normalized enables automatic normalization of the vectors.
 	--  Stride is the distance between vectors. A stride of 0 is replaced with the size of a vector.
 	--  Pointer is the offset in memory or in the buffer (as appropriate) to read from.
-	f("void", "glDisableVertexAttribArray", "unsigned int", "index")
+	f("void", "glDisableVertexAttribArray", "unsigned int")
+	-- index
 	--  Disable a vertex attribute array. Note that 0 is vertex position.
 
-	f("void", "glDrawArrays", "int", "mode", "int", "first", "int", "count")
+	f("void", "glDrawArrays", "int", "int", "int")
+	-- mode first count
 	--  Draws primitives from vertex attribute arrays.
-	f("void", "glDrawElements", "int", "mode", "int", "first", "int", "count", "void *", "alwaysnull")
+	f("void", "glDrawElements", "int", "int", "int", "void *")
+	-- mode first count alwaysnull
 	--  Draws primitives from vertex attribute arrays, with ordering from the GL_ELEMENT_ARRAY_BUFFER.
 	--  alwaysnull must be always null.
 	--  This is the Mac OS X friendly subset - see:
