@@ -11,6 +11,20 @@ ng.createGL = function (getProcAddress)
 	ictx.GL_FALSE = 0
 	ictx.GL_TRUE = 1
 
+	ictx.GL_NO_ERROR = 0
+	ictx.GL_INVALID_ENUM = 0x500
+	ictx.GL_INVALID_VALUE = 0x501
+	ictx.GL_INVALID_OPERATION = 0x502
+	ictx.GL_STACK_OVERFLOW = 0x503
+	ictx.GL_STACK_UNDERFLOW = 0x504
+	ictx.GL_OUT_OF_MEMORY = 0x505
+
+	ictx.GL_VENDOR = 0x1F00
+	ictx.GL_RENDERER = 0x1F01
+	ictx.GL_VERSION = 0x1F02
+	ictx.GL_EXTENSIONS = 0x1F03
+	ictx.GL_SHADING_LANGUAGE_VERSION = 0x8B8C
+
 	ictx.GL_DEPTH_BUFFER_BIT = 0x100
 	ictx.GL_ACCUM_BUFFER_BIT = 0x200
 	ictx.GL_STENCIL_BUFFER_BIT = 0x400
@@ -203,21 +217,18 @@ ng.createGL = function (getProcAddress)
 	end
 
 	-- # Meta
-	f("void", "glEnable", "int")
-	-- cap
-	-- Enables a 'server-side' OpenGL capability.
-	--  One of: GL_ALPHA_TEST, GL_DEPTH_TEST, GL_STENCIL_TEST, GL_SCISSOR_TEST, GL_BLEND, GL_CLIP_PLANE0 + x,
-	--  GL_VERTEX_PROGRAM_POINT_SIZE, GL_VERTEX_PROGRAM_TWO_SIDE,
-	--  GL_LINE_STIPPLE, GL_CULL_FACE
-	f("void", "glDisable", "int")
-	-- cap
-	--  Disables a 'server-side' OpenGL capability. See glEnable for a list.
 	f("void", "glFlush")
 	--  Flushes all buffers, guaranteeing that all GL commands will be done.
 	f("void", "glFinish")
 	--  Ensures all GL commands are done before it returns.
+	f("int", "glGetError")
+	--  Gets the current error, resetting it to GL_NO_ERROR.
+	f("char *", "glGetString", "int")
+	-- property
+	--  Gets a static string.
+	--  property is one of: GL_VENDOR, GL_RENDERER, GL_VERSION, GL_EXTENSIONS, GL_SHADING_LANGUAGE_VERSION
 
-	-- # Drawing Target Control
+	-- # Renderbuffers
 	f("void", "glGenRenderbuffersEXT", "int", "unsigned int *")
 	-- n buffers
 	--  Generate a set of renderbuffer objects.
@@ -230,6 +241,7 @@ ng.createGL = function (getProcAddress)
 	-- n buffers
 	--  Delete a set of renderbuffer objects.
 
+	-- # Framebuffers
 	f("void", "glGenFramebuffersEXT", "int", "unsigned int *")
 	-- n buffers
 	--  Generate a set of framebuffer objects.
@@ -271,19 +283,22 @@ ng.createGL = function (getProcAddress)
 	f("void", "glFramebufferTexture3DEXT", "int", "int", "int", "unsigned int", "int", "int")
 	-- target1 at target2 tex level z
 	--  See glFramebufferTexture1DEXT, but as this is part of 2D rendering, a z-offset within the texture is specified as a target.
-
-	f("void", "glDrawBuffer", "int")
-	-- buffer
-	--  Sets one attachment to output fragment colour to. This is a property of the target framebuffer.
-	--  While there are many specified valid values, the relevant ones are dependent on target.
-	--  For framebuffer 0, GL_NONE, GL_FRONT and GL_BACK are the targets of importance.
-	--  Note that in this case, glDrawBuffers should not be used.
-	--  For user-created framebuffers, GL_NONE and GL_COLO[U]R_ATTACHMENT0_EXT + n are valid where those attachments exist.
-	f("void", "glDrawBuffers", "int", "const int *")
-	-- count buffers
-	--  Sets the attachments to output fragment colour to. For further information, see glDrawBuffer.
+	f("void", "glReadPixels", "int", "int", "int", "int", "unsigned int", "unsigned int", "void *")
+	-- x y width height iformat type data
+	-- 'iformat' is roughly the same as glRenderbufferStorageEXT's parameter
+	-- 'type' is roughly the sort of thing accepted by the TexImage type
 
 	-- # Drawing Control
+	f("void", "glEnable", "int")
+	-- cap
+	--  Enables a 'server-side' OpenGL capability.
+	--   One of: GL_ALPHA_TEST, GL_DEPTH_TEST, GL_STENCIL_TEST, GL_SCISSOR_TEST, GL_BLEND, GL_CLIP_PLANE0 + x,
+	--   GL_VERTEX_PROGRAM_POINT_SIZE, GL_VERTEX_PROGRAM_TWO_SIDE,
+	--   GL_LINE_STIPPLE, GL_CULL_FACE
+	f("void", "glDisable", "int")
+	-- cap
+	--  Disables a 'server-side' OpenGL capability. See glEnable for a list.
+
 	f("void", "glAlphaFunc", "int", "float")
 	-- func ref
 	--  Sets the alpha test function to one of
@@ -369,6 +384,17 @@ ng.createGL = function (getProcAddress)
 	-- x y width height
 	--  Sets the scissor rectangle. You need to enable GL_SCISSOR_TEST to use this.
 
+	f("void", "glDrawBuffer", "int")
+	-- buffer
+	--  Sets one attachment to output fragment colour to. This is a property of the target framebuffer.
+	--  While there are many specified valid values, the relevant ones are dependent on target.
+	--  For framebuffer 0, GL_NONE, GL_FRONT and GL_BACK are the targets of importance.
+	--  Note that in this case, glDrawBuffers should not be used.
+	--  For user-created framebuffers, GL_NONE and GL_COLO[U]R_ATTACHMENT0_EXT + n are valid where those attachments exist.
+	f("void", "glDrawBuffers", "int", "const int *")
+	-- count buffers
+	--  Sets the attachments to output fragment colour to. For further information, see glDrawBuffer.
+
 	-- # Clear
 	f("void", "glClear", "unsigned int")
 	-- bufferBits
@@ -388,7 +414,7 @@ ng.createGL = function (getProcAddress)
 	-- s
 	--  Sets the stencil clear value.
 
-	-- # Shader
+	-- # Shaders
 	f("unsigned int", "glCreateProgram")
 	--  Creates a shader program.
 	f("void", "glLinkProgram", "unsigned int")
@@ -410,6 +436,7 @@ ng.createGL = function (getProcAddress)
 	f("unsigned int", "glCreateShader", "int")
 	-- type
 	--  Creates a shader object.
+	--  One of: GL_VERTEX_SHADER, GL_FRAGMENT_SHADER
 	f("void", "glShaderSource", "unsigned int", "int", "const char **", "const int *")
 	-- shader count strings length
 	--  Provides source for a shader object.
@@ -545,17 +572,9 @@ ng.createGL = function (getProcAddress)
 	-- target size data usage
 	--  Sets up a buffer. If data is null, the data is uninitialized.
 	--  Usage can be one of GL_STATIC_DRAW, GL_DYNAMIC_DRAW.
-	f("void *", "glMapBuffer", "int", "int")
-	-- target access
-	--  Maps a buffer into memory.
-	--  Access mode can be one of: GL_READ_ONLY, GL_WRITE_ONLY, GL_READ_WRITE.
-	--  Can return NULL on error.
-	--  glUnmapBuffer must be used on the buffer before continued use.
-	f("int", "glUnmapBuffer", "int")
-	-- target
-	--  Unmaps a buffer. Must be done before continued use of the buffer.
+	-- glMapBuffer/glUnmapBuffer too slow to be practical last I checked
 
-	-- # Drawing
+	-- # Vertex Attributes
 	f("void", "glEnableVertexAttribArray", "unsigned int")
 	-- index
 	--  Enable a vertex attribute array. Note that 0 is vertex position.
@@ -572,6 +591,7 @@ ng.createGL = function (getProcAddress)
 	-- index
 	--  Disable a vertex attribute array. Note that 0 is vertex position.
 
+	-- # Drawing
 	f("void", "glDrawArrays", "int", "int", "int")
 	-- mode first count
 	--  Draws primitives from vertex attribute arrays.
