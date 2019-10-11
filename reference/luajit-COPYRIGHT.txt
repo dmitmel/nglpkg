@@ -1,5 +1,9 @@
 This program uses LuaJIT, which in turn uses Lua 5.1/5.2 and dlmalloc.
 
+The "Darwin x86_64" build is actually "luajit_real".
+
+The "luajit" application is used to attempt to help stranded Mac OS X Catalina users who have been fucked over by the security policy changes.
+
 The build used was downloaded 
  from https://github.com/luapower/luajit/archive/master.zip
 
