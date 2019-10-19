@@ -1,7 +1,11 @@
+--@: This is a number of extensions to the table library.
+--@:
 ng.module(
 	"ng.lib.util.table"
 )
-
+--@: table.shuffle(tbl): Randomly swaps 2 elements in the table #tbl * 16 times.
+--@:  May swap an element with itself (has no effect).
+--@:
 table.shuffle = function (tbl)
 	for i = 1, #tbl * 16 do
 		local swap1 = math.random(#tbl)
@@ -10,7 +14,8 @@ table.shuffle = function (tbl)
 	end
 end
 
--- Shallow
+--@: table.copy(tbl): Creates a shallow copy of the given table.
+--@:  Keys and values that point to other tables remain pointing to those other tables.
 table.copy = function (tbl)
 	local ntbl = {}
 	for k, v in pairs(tbl) do

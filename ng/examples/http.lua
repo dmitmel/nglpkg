@@ -1,5 +1,7 @@
+--@> ng.doc.command({}, nil)
+--@> DOC.target = "10-Examples-Simple"
 ng.module(
-	"examples.http",
+	"ng.examples.http",
 	"ng.lib.net.http-client",
 	"ng.lib.util.polling-station"
 )

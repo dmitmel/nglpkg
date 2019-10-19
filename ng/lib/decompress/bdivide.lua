@@ -1,3 +1,5 @@
+--@: This module provides decompression for the algorithm used by [[ng.appsize.bdivide]].
+--@: ng.decompressBDivide(data): Returns the decompressed output for the input data.
 ng.module(
 	"ng.lib.decompress.bdivide"
 )

@@ -1,3 +1,5 @@
+--@: This is a particularly useful yet short library.
+--@: ng.quoteString(s): Returns Lua code to return the exact string given.
 ng.module(
 	"ng.lib.util.quote"
 )

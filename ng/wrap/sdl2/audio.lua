@@ -3,7 +3,7 @@ ng.module(
 	"ng.wrap.sdl2.base"
 )
 
--- SDL_audio
+--@: SDL_audio
 
 -- This gets 'interesting'.
 ng.sdl2Enums.SDL_AUDIO_MASK_BITSIZE = 0xFF

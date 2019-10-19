@@ -3,14 +3,22 @@ ng.module(
 	"ng.wrap.ffi"
 )
 
---- Creates an OpenGL binding object.
--- Note: The version of OpenGL this supports is "2.1 minus legacy stuff".
--- The "minus legacy stuff" requires the exact allowed subset to be documented.
-ng.createGL = function (getProcAddress)
+--@> DOC.functions = "ng."
+function ng.createGL(getProcAddress)
+	--@> DOC.functions = nil
+	--@: Creates an OpenGL binding object.
+	--@: Note: The version of OpenGL this supports is "2.1 minus legacy stuff".
+	--@: The "minus legacy stuff" requires the exact allowed subset to be documented.
+
 	local ictx = {}
+
+	--@> DOC.echo = true
+	--@> ng.doc.section("Enums, Part I")
+	-- Booleans
 	ictx.GL_FALSE = 0
 	ictx.GL_TRUE = 1
 
+	-- Errors
 	ictx.GL_NO_ERROR = 0
 	ictx.GL_INVALID_ENUM = 0x500
 	ictx.GL_INVALID_VALUE = 0x501
@@ -19,18 +27,21 @@ ng.createGL = function (getProcAddress)
 	ictx.GL_STACK_UNDERFLOW = 0x504
 	ictx.GL_OUT_OF_MEMORY = 0x505
 
+	-- glGetString
 	ictx.GL_VENDOR = 0x1F00
 	ictx.GL_RENDERER = 0x1F01
 	ictx.GL_VERSION = 0x1F02
 	ictx.GL_EXTENSIONS = 0x1F03
 	ictx.GL_SHADING_LANGUAGE_VERSION = 0x8B8C
 
+	-- glClear
 	ictx.GL_DEPTH_BUFFER_BIT = 0x100
 	ictx.GL_ACCUM_BUFFER_BIT = 0x200
 	ictx.GL_STENCIL_BUFFER_BIT = 0x400
 	ictx.GL_COLOR_BUFFER_BIT = 0x4000
 	ictx.GL_COLOUR_BUFFER_BIT = ictx.GL_COLOR_BUFFER_BIT
-
+	--@> ng.doc.section("Enums, Part II")
+	-- glEnable/glDisable
 	ictx.GL_LINE_STIPPLE = 0xB24
 	ictx.GL_CULL_FACE = 0xB44
 	ictx.GL_DEPTH_TEST = 0x0B71
@@ -42,13 +53,37 @@ ng.createGL = function (getProcAddress)
 	ictx.GL_VERTEX_PROGRAM_POINT_SIZE = 0x8642
 	ictx.GL_VERTEX_PROGRAM_TWO_SIDE = 0x8643
 
+	-- glBindBuffer
+	ictx.GL_ARRAY_BUFFER = 0x8892
+	ictx.GL_ELEMENT_ARRAY_BUFFER = 0x8893
+
+	-- Buffer types
+	ictx.GL_STATIC_DRAW = 0x88E4
+	ictx.GL_DYNAMIC_DRAW = 0x88E8
+
+	-- Primitives
+	ictx.GL_POINTS = 0
+	ictx.GL_LINES = 1
+	ictx.GL_LINE_STRIP = 2
+	ictx.GL_LINE_LOOP = 3
+	ictx.GL_TRIANGLES = 4
+	ictx.GL_TRIANGLE_STRIP = 5
+	ictx.GL_TRIANGLE_FAN = 6
+	ictx.GL_QUADS = 7
+	ictx.GL_QUAD_STRIP = 8
+	ictx.GL_POLYGON = 9
+
+	--@> ng.doc.section("Enums, Part III")
+	-- glCreateShader
+	ictx.GL_FRAGMENT_SHADER = 0x8B30
+	ictx.GL_VERTEX_SHADER = 0x8B31
+
+	-- shader/program vars
 	ictx.GL_COMPILE_STATUS = 0x8B81
 	ictx.GL_INFO_LOG_LENGTH = 0x8B84
 	ictx.GL_LINK_STATUS = 0x8B82
 
-	ictx.GL_ARRAY_BUFFER = 0x8892
-	ictx.GL_ELEMENT_ARRAY_BUFFER = 0x8893
-
+	-- glBindTexture
 	ictx.GL_TEXTURE0 = 0x84C0
 
 	ictx.GL_FRONT = 0x404
@@ -69,23 +104,20 @@ ng.createGL = function (getProcAddress)
 	ictx.GL_TEXTURE_CUBE_MAP_POSITIVE_Z = 0x8519
 	ictx.GL_TEXTURE_CUBE_MAP_NEGATIVE_Z = 0x851A
 
-	ictx.GL_READ_ONLY = 0x88B8
-	ictx.GL_WRITE_ONLY = 0x88B9
-	ictx.GL_READ_WRITE = 0x88BA
-
-	ictx.GL_POINTS = 0
-	ictx.GL_LINES = 1
-	ictx.GL_LINE_STRIP = 2
-	ictx.GL_LINE_LOOP = 3
-	ictx.GL_TRIANGLES = 4
-	ictx.GL_TRIANGLE_STRIP = 5
-	ictx.GL_TRIANGLE_FAN = 6
-	ictx.GL_QUADS = 7
-	ictx.GL_QUAD_STRIP = 8
-	ictx.GL_POLYGON = 9
-
-	ictx.GL_FRAGMENT_SHADER = 0x8B30
-	ictx.GL_VERTEX_SHADER = 0x8B31
+	--@> ng.doc.section("Enums, Part IV")
+	-- Texture Parameters
+	ictx.GL_TEXTURE_MAG_FILTER = 0x2800
+	ictx.GL_TEXTURE_MIN_FILTER = 0x2801
+	ictx.GL_TEXTURE_WRAP_S = 0x2802
+	ictx.GL_TEXTURE_WRAP_T = 0x2803
+	ictx.GL_TEXTURE_WRAP_R = 0x8072
+	ictx.GL_TEXTURE_MIN_LOD = 0x813A
+	ictx.GL_TEXTURE_MAX_LOD = 0x813B
+	ictx.GL_TEXTURE_BASE_LEVEL = 0x813C
+	ictx.GL_TEXTURE_MAX_LEVEL = 0x813D
+	ictx.GL_TEXTURE_PRIORITY = 0x8066
+	-- COMPARE_MODE/COMPARE_FUNC seem to be texenv
+	ictx.GL_GENERATE_MIPMAP = 0x8191
 
 	ictx.GL_ZERO = 0
 	ictx.GL_ONE = 1
@@ -102,14 +134,16 @@ ng.createGL = function (getProcAddress)
 	ictx.GL_ONE_MINUS_CONSTANT_COLOR = 0x8002
 	ictx.GL_CONSTANT_ALPHA = 0x8003
 	ictx.GL_ONE_MINUS_CONSTANT_ALPHA = 0x8004
-
+	-- where 'COLOR' is mentioned, there are 'COLOUR' aliases
+	--@> DOC.echo = false
 	ictx.GL_SRC_COLOUR = ictx.GL_SRC_COLOR
 	ictx.GL_ONE_MINUS_SRC_COLOUR = ictx.GL_ONE_MINUS_SRC_COLOR
 	ictx.GL_DST_COLOUR = ictx.GL_DST_COLOR
 	ictx.GL_ONE_MINUS_DST_COLOUR = ictx.GL_ONE_MINUS_DST_COLOR
 	ictx.GL_CONSTANT_COLOUR = ictx.GL_CONSTANT_COLOR
 	ictx.GL_ONE_MINUS_CONSTANT_COLOUR = ictx.GL_ONE_MINUS_CONSTANT_COLOR
-
+	--@> DOC.echo = true
+	--@> ng.doc.section("Enums, Part V")
 	ictx.GL_FUNC_ADD = 0x8006
 	ictx.GL_FUNC_SUBTRACT = 0x800A
 	ictx.GL_FUNC_REVERSE_SUBTRACT = 0x800B
@@ -137,19 +171,7 @@ ng.createGL = function (getProcAddress)
 	ictx.GL_DECR_WRAP = 0x8508
 	ictx.GL_INVERT = 0x150A
 
-	ictx.GL_TEXTURE_MAG_FILTER = 0x2800
-	ictx.GL_TEXTURE_MIN_FILTER = 0x2801
-	ictx.GL_TEXTURE_WRAP_S = 0x2802
-	ictx.GL_TEXTURE_WRAP_T = 0x2803
-	ictx.GL_TEXTURE_WRAP_R = 0x8072
-	ictx.GL_TEXTURE_MIN_LOD = 0x813A
-	ictx.GL_TEXTURE_MAX_LOD = 0x813B
-	ictx.GL_TEXTURE_BASE_LEVEL = 0x813C
-	ictx.GL_TEXTURE_MAX_LEVEL = 0x813D
-	ictx.GL_TEXTURE_PRIORITY = 0x8066
-	-- GL_TEXTURE_COMPARE_MODE / GL_TEXTURE_COMPARE_FUNC seems to be texenv...
-	ictx.GL_GENERATE_MIPMAP = 0x8191
-
+	--@> ng.doc.section("Enums, Part VI")
 	ictx.GL_NEAREST = 0x2600
 	ictx.GL_LINEAR = 0x2601
 	ictx.GL_NEAREST_MIPMAP_NEAREST = 0x2700
@@ -182,10 +204,7 @@ ng.createGL = function (getProcAddress)
 
 	ictx.GL_UNSIGNED_INT_8_8_8_8 = 0x8035
 	ictx.GL_UNSIGNED_INT_8_8_8_8_REV = 0x8367
-
-	ictx.GL_STATIC_DRAW = 0x88E4
-	ictx.GL_DYNAMIC_DRAW =  0x88E8
-
+	--@> ng.doc.section("Enums, Part VII")
 	-- all the EXT_framebuffer_object things
 	ictx.GL_FRAMEBUFFER_EXT = 0x8D40
 	ictx.GL_RENDERBUFFER_EXT = 0x8D41
@@ -201,6 +220,7 @@ ng.createGL = function (getProcAddress)
 	-- not actually directly part of the extension, but it's sort of there.
 	ictx.GL_STENCIL_INDEX = 0x1901
 	ictx.GL_DEPTH_COMPONENT = 0x1902
+	--@> DOC.echo = false
 
 	--- Gets a function pointer according to the given signature.
 	local function f(rt, n, ...)
@@ -216,7 +236,8 @@ ng.createGL = function (getProcAddress)
 		ictx[n] = ffi.cast(tp, getProcAddress(n))
 	end
 
-	-- # Meta
+	--@> ng.doc.section("Meta")
+	--@> DOC.echo = true
 	f("void", "glFlush")
 	--  Flushes all buffers, guaranteeing that all GL commands will be done.
 	f("void", "glFinish")
@@ -228,7 +249,7 @@ ng.createGL = function (getProcAddress)
 	--  Gets a static string.
 	--  property is one of: GL_VENDOR, GL_RENDERER, GL_VERSION, GL_EXTENSIONS, GL_SHADING_LANGUAGE_VERSION
 
-	-- # Renderbuffers
+	--@> ng.doc.section("Renderbuffers")
 	f("void", "glGenRenderbuffersEXT", "int", "unsigned int *")
 	-- n buffers
 	--  Generate a set of renderbuffer objects.
@@ -241,7 +262,7 @@ ng.createGL = function (getProcAddress)
 	-- n buffers
 	--  Delete a set of renderbuffer objects.
 
-	-- # Framebuffers
+	--@> ng.doc.section("Framebuffers")
 	f("void", "glGenFramebuffersEXT", "int", "unsigned int *")
 	-- n buffers
 	--  Generate a set of framebuffer objects.
@@ -270,6 +291,7 @@ ng.createGL = function (getProcAddress)
 	--  Any existing renderbuffer is detached.
 	--  If rb is not 0, then that renderbuffer is attached.
 
+	--@> ng.doc.section("Framebuffers II")
 	f("void", "glFramebufferTexture1DEXT", "int", "int", "int", "unsigned int", "int")
 	-- target1 at target2 tex level
 	--  Attaches a given mipmap level of a texture to a framebuffer attachment.
@@ -288,7 +310,7 @@ ng.createGL = function (getProcAddress)
 	-- 'iformat' is roughly the same as glRenderbufferStorageEXT's parameter
 	-- 'type' is roughly the sort of thing accepted by the TexImage type
 
-	-- # Drawing Control
+	--@> ng.doc.section("Drawing Control")
 	f("void", "glEnable", "int")
 	-- cap
 	--  Enables a 'server-side' OpenGL capability.
@@ -311,6 +333,7 @@ ng.createGL = function (getProcAddress)
 	-- target func ref andmask
 	--  Updates one of: GL_FRONT, GL_BACK, or both (GL_FRONT_AND_BACK) stencil test functions to one of the comparison operators (see glAlphaFunc)
 
+	--@> ng.doc.section("Drawing Control II")
 	f("void", "glStencilMask", "unsigned int")
 	-- mask
 	--  See glStencilMaskSeparate with a target of GL_FRONT_AND_BACK.
@@ -336,6 +359,7 @@ ng.createGL = function (getProcAddress)
 	--  Can also be referred to as glColourMask.
 	ictx.glColourMask = ictx.glColorMask
 
+	--@> ng.doc.section("Drawing Control III")
 	f("void", "glBlendFunc", "int", "int")
 	-- sfactor dfactor
 	--  Sets the source & destination blending factors. Factors can be any of
@@ -356,6 +380,7 @@ ng.createGL = function (getProcAddress)
 	-- mode
 	--  Sets the blending equation to one of: GL_FUNC_ADD, GL_FUNC_SUBTRACT, GL_FUNC_REVERSE_SUBTRACT, GL_MIN, GL_MAX.
 
+	--@> ng.doc.section("Drawing Control IV")
 	f("void", "glCullFace", "int")
 	-- mode
 	--  Sets the culling mode to one of: GL_FRONT, GL_BACK, GL_FRONT_AND_BACK.
@@ -384,6 +409,7 @@ ng.createGL = function (getProcAddress)
 	-- x y width height
 	--  Sets the scissor rectangle. You need to enable GL_SCISSOR_TEST to use this.
 
+	--@> ng.doc.section("Attachment Control")
 	f("void", "glDrawBuffer", "int")
 	-- buffer
 	--  Sets one attachment to output fragment colour to. This is a property of the target framebuffer.
@@ -395,7 +421,7 @@ ng.createGL = function (getProcAddress)
 	-- count buffers
 	--  Sets the attachments to output fragment colour to. For further information, see glDrawBuffer.
 
-	-- # Clear
+	--@> ng.doc.section("Clear")
 	f("void", "glClear", "unsigned int")
 	-- bufferBits
 	--  Clears the indicated buffers (an OR of GL_*_BUFFER_BIT) to the corresponding current clear values.
@@ -414,25 +440,7 @@ ng.createGL = function (getProcAddress)
 	-- s
 	--  Sets the stencil clear value.
 
-	-- # Shaders
-	f("unsigned int", "glCreateProgram")
-	--  Creates a shader program.
-	f("void", "glLinkProgram", "unsigned int")
-	-- program
-	--  Links a program object.
-	f("void", "glUseProgram", "unsigned int")
-	-- program
-	--  Use a program object.
-	f("void", "glGetProgramInfoLog", "unsigned int", "int", "int *", "char *")
-	-- program maxLength length infoLog
-	--  Get an info log for a program.
-	f("void", "glGetProgramiv", "unsigned int", "int", "int *")
-	-- program parameter result
-	--  Gets a program object parameter. One of: GL_LINK_STATUS, GL_INFO_LOG_LENGTH
-	f("void", "glDeleteProgram", "unsigned int")
-	-- program
-	--  Deletes a shader program.
-
+	--@> ng.doc.section("Shaders")
 	f("unsigned int", "glCreateShader", "int")
 	-- type
 	--  Creates a shader object.
@@ -456,6 +464,25 @@ ng.createGL = function (getProcAddress)
 	-- shader
 	--  Deletes a shader object.
 
+	--@> ng.doc.section("Shader Programs")
+	f("unsigned int", "glCreateProgram")
+	--  Creates a shader program.
+	f("void", "glLinkProgram", "unsigned int")
+	-- program
+	--  Links a program object.
+	f("void", "glUseProgram", "unsigned int")
+	-- program
+	--  Use a program object.
+	f("void", "glGetProgramInfoLog", "unsigned int", "int", "int *", "char *")
+	-- program maxLength length infoLog
+	--  Get an info log for a program.
+	f("void", "glGetProgramiv", "unsigned int", "int", "int *")
+	-- program parameter result
+	--  Gets a program object parameter. One of: GL_LINK_STATUS, GL_INFO_LOG_LENGTH
+	f("void", "glDeleteProgram", "unsigned int")
+	-- program
+	--  Deletes a shader program.
+
 	f("int", "glGetAttribLocation", "unsigned int", "const char *")
 	-- program name
 	--  Gets a vertex attribute index for a given program & attribute name.
@@ -463,8 +490,8 @@ ng.createGL = function (getProcAddress)
 	-- program name
 	--  Gets a uniform index for a given program & uniform name.
 
-	-- # Shader Uniforms
-	-----
+	--@> ng.doc.section("Shader Program Uniforms")
+	--@> DOC.echo = false
 	local function vau(pfx, tp, tpc, tpl)
 		f("void", "gl" .. pfx .. "1" .. tpc, tpl, tp)
 		-- location v0
@@ -489,7 +516,7 @@ ng.createGL = function (getProcAddress)
 		f("void", "gl" .. pfx .. "3" .. tpc .. "v", tpl, tp)
 		f("void", "gl" .. pfx .. "4" .. tpc .. "v", tpl, tp)
 	end
-	--+--
+	--@> DOC.echo = true
 	--? Sets a float or vector uniform.
 	vau("Uniform", "float", "f", "int")
 	vau("Uniform", "int", "i", "int")
@@ -518,46 +545,48 @@ ng.createGL = function (getProcAddress)
 	f("void", "glUniformMatrix4x3fv", "int", "int", "int", "const float *")
 	--=
 
-	-- # Textures
+	--@> ng.doc.section("Textures")
 	f("void", "glGenTextures", "int", "unsigned int *")
 	-- n buffers
 	--  Generate a set of texture objects.
 	f("void", "glBindTexture", "int", "unsigned int")
 	-- target buffer
 	--  Bind a texture to one of: GL_TEXTURE_1D, GL_TEXTURE_2D, GL_TEXTURE_3D, GL_TEXTURE_CUBE_MAP
+	f("void", "glDeleteTextures", "int", "unsigned int *")
+	-- n buffers
+	--  Delete a set of texture objects.
+	--  Need to handle the other texture things
 	f("void", "glActiveTexture", "int")
 	-- textureUnit
 	--  Set the active texture unit, which must be GL_TEXTURE0 + the texture unit number.
 	f("void", "glTexImage1D", "int", "int", "int", "int", "int", "int", "int", "void *")
 	-- target level internalFormat width border format type data
-	--  Sets up a 1D texture.
+	--  Sets up a 1D texture. To actually use it you'll need to set some texture parameters.
 	f("void", "glTexImage2D", "int", "int", "int", "int", "int", "int", "int", "int", "void *")
 	-- target level internalFormat width height border format type data
-	--  Sets up a 2D texture.
+	--  Sets up a 2D texture. To actually use it you'll need to set some texture parameters.
 	f("void", "glTexImage3D", "int", "int", "int", "int", "int", "int", "int", "int", "int", "void *")
 	-- target level internalFormat width height depth border format type data
-	--  Sets up a 3D texture.
-	f("void", "glCopyTexImage1D", "int", "int", "int", "int", "int", "int", "int")
-	-- target level internalFormat x y width border
-	--  Sets up a 1D texture from the framebuffer.
-	f("void", "glCopyTexImage2D", "int", "int", "int", "int", "int", "int", "int", "int")
-	-- target level internalFormat x y width height border
-	--  Sets up a 2D texture from the framebuffer.
+	--  Sets up a 3D texture. To actually use it you'll need to set some texture parameters.
+	--@> ng.doc.section("Texture Parameters")
 	f("void", "glTexParameteri", "int", "int", "int")
 	-- target prop value
 	--  Sets a texture parameter. Can be one of: GL_TEXTURE_MIN_FILTER, GL_TEXTURE_MAG_FILTER, GL_TEXTURE_MIN_LOD, GL_TEXTURE_MAX_LOD, GL_TEXTURE_BASE_LEVEL, GL_TEXTURE_MAX_LEVEL, GL_TEXTURE_WRAP_S, GL_TEXTURE_WRAP_T, GL_TEXTURE_WRAP_R, GL_TEXTURE_PRIORITY, GL_TEXTURE_COMPARE_MODE, GL_TEXTURE_COMPARE_FUNC, GL_DEPTH_TEXTURE_MODE, GL_GENERATE_MIPMAP
 	f("void", "glTexParameterf", "int", "int", "float")
 	-- target prop value
 	--  Sets a texture parameter. See glTexParameteri for available parameters.
-	f("void", "glDeleteTextures", "int", "unsigned int *")
-	-- n buffers
-	--  Delete a set of texture objects.
-	--  Need to handle the other texture things
+	--@> ng.doc.section("Textures II")
 	f("void", "glGenerateMipmapEXT", "int")
 	-- target
 	--  Generates the mipmaps for a texture.
+	f("void", "glCopyTexImage1D", "int", "int", "int", "int", "int", "int", "int")
+	-- target level internalFormat x y width border
+	--  Sets up a 1D texture from the framebuffer. To actually use it you'll need to set some texture parameters.
+	f("void", "glCopyTexImage2D", "int", "int", "int", "int", "int", "int", "int", "int")
+	-- target level internalFormat x y width height border
+	--  Sets up a 2D texture from the framebuffer. To actually use it you'll need to set some texture parameters.
 
-	-- # Buffers
+	--@> ng.doc.section("Buffers")
 	f("void", "glGenBuffers", "int", "unsigned int *")
 	-- n buffers
 	--  Generate a set of buffer objects.
@@ -574,7 +603,7 @@ ng.createGL = function (getProcAddress)
 	--  Usage can be one of GL_STATIC_DRAW, GL_DYNAMIC_DRAW.
 	-- glMapBuffer/glUnmapBuffer too slow to be practical last I checked
 
-	-- # Vertex Attributes
+	--@> ng.doc.section("Vertex Attributes")
 	f("void", "glEnableVertexAttribArray", "unsigned int")
 	-- index
 	--  Enable a vertex attribute array. Note that 0 is vertex position.
@@ -591,7 +620,7 @@ ng.createGL = function (getProcAddress)
 	-- index
 	--  Disable a vertex attribute array. Note that 0 is vertex position.
 
-	-- # Drawing
+	--@> ng.doc.section("Drawing")
 	f("void", "glDrawArrays", "int", "int", "int")
 	-- mode first count
 	--  Draws primitives from vertex attribute arrays.
@@ -601,6 +630,6 @@ ng.createGL = function (getProcAddress)
 	--  alwaysnull must be always null.
 	--  This is the Mac OS X friendly subset - see:
 	--  https://people.eecs.ku.edu/~jrmiller/Courses/672/InClass/3DModeling/glDrawElements.html
-
+	--@> DOC.echo = false
 	return ictx
 end

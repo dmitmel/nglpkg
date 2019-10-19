@@ -1,3 +1,5 @@
+--@: This module uses ZLib to compress data in DEFLATE format.
+--@: ng.compressDeflate(data): Returns the data compressed in DEFLATE format.
 ng.module(
 	"ng.lib.compress.deflate",
 	"ng.wrap.zlib"

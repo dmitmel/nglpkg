@@ -1,3 +1,7 @@
+--@> DOC.module.MODULE = "ng.lib.decompress.deflate"
+--@: This module allows decompressing DEFLATE-compressed data.
+--@: The function ng.decompressDeflate(data) returns the resulting data, or errors if something goes wrong.
+
 ng.module(
 	"ng.lib.decompress.deflate.zlib",
 	"ng.wrap.zlib"

@@ -1,3 +1,5 @@
+--@: Allows the creation of worker threads through ancient magic.
+--@: Use at your peril.
 ng.module(
 	"ng.lib.worker",
 	"ng.wrap.ffi",

@@ -1,3 +1,8 @@
+--@> DOC.target = "03-BakingInfrastructure"
+--@: This module provides the functions used when baking an application.
+--@: Not those used as part of the application when baked, but the functions used in the tools that bake applications.
+--@:
+
 ng.module(
 	"ng.boot-bake",
 	"ng.lib.util.finder",
@@ -5,6 +10,11 @@ ng.module(
 )
 
 -- Start off by defining the baking framework.
+
+--@: ng.bakeModules: Table, mapping module names to true when that module has already been completely baked.
+--@: ng.bakingModules: Table, mapping module names to true when that module is being baked, but isn't done yet.
+--@: ng.bakingDirectives: Table, mapping baking directive names to functions to run them: function(state, lines)
+--@: TODO: OTHER STUFF
 
 ng.bakeModules = {}
 ng.bakingModules = {}

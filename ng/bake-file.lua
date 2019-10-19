@@ -1,6 +1,7 @@
--- NOT AN NG MODULE, BECAUSE THE BAKING STUFF WOULD FAIL IF YOU TRIED --
-
--- A simple application baker tool.
+--@> DOC.target = "01-B-Bakefile"
+--@> ng.doc.command({"filename"}, "modules")
+--@: For the general concept, see [[ng.bake]].
+--@: This version writes the result of baking to a file.
 require("ng.boot-bake")
 
 -- Since the command-line isn't UTF-8 we mustn't require ng.wrap.fs

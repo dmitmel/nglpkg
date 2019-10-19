@@ -1,3 +1,5 @@
+--@: Implements ng.encoding["UTF-16"] (see [[ng.lib.encoding.base]])
+--@: This encoding is evil and should not exist, but Windows uses it.
 ng.module(
 	"ng.lib.encoding.utf16",
 	"ng.lib.encoding.base"

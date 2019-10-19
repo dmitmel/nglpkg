@@ -1,5 +1,9 @@
+--@> ng.doc.command({}, nil)
+--@> DOC.target = "10-Examples-Simple"
+--@: [[ng.lib.worker]] usage example. Proves it's really multi-threading.
+--@: Also never ends.
 ng.module(
-	"examples.worker",
+	"ng.examples.worker",
 	"ng.lib.worker",
 	"ng.wrap.ffi"
 )

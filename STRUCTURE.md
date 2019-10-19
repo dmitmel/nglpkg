@@ -16,20 +16,6 @@ There's `sdk.lua` here, which is the SDK 'do many, many things' entrypoint.
 
 There's also `setup.sh` (Unix-likes) and `setup.cmd` (Windows).
 
-# examples
-
-SDK examples.
-
-# haxe
-
-Used for writing NGLPKG applications in Haxe.
-
-On the one hand, it may be harder to get the development environment between computers with more dependencies.
-
-It may be an idea to write your build script in Lua and expect it to be run with `$NGLPKG_SDK/env` - this can ease porting in some aspects (and utterly ruin it in others).
-
-On the other hand, this can be worth it for the architecture of bigger programs where *not* performing some form of static typing would cause the program to collapse.
-
 # ng
 
 All SDK packages.
@@ -39,6 +25,10 @@ All SDK packages.
 "ng.boot-bake" is really a module, but which starts a bake by requiring it.
 
 These two provide the minimum necessary components for nglpkg's "SDK".
+
+# ng.examples
+
+SDK examples.
 
 ## ng.appsize
 

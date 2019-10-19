@@ -1,3 +1,6 @@
+--@: Implements ng.encoding["UTF-8"] (see [[ng.lib.encoding.base]])
+--@: This is the only standard encoding in the universe, and you should stop using other encodings.
+--@: Except maybe UTF-32. But not UTF-16.
 ng.module(
 	"ng.lib.encoding.utf8",
 	"ng.lib.encoding.base"

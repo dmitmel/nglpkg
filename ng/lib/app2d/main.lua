@@ -1,3 +1,6 @@
+--@: This provides the main loop used by app2d.
+--@: Hence, it's also necessary to run an app2d application.
+--@> DOC.functions = "ng.app2d."
 ng.module(
 	"ng.lib.app2d.main",
 	"ng.lib.app2d.base",
@@ -9,17 +12,17 @@ ng.module(
 )
 
 function ng.app2d.isQuit(event)
+	--@: Determines if an SDL_Event is, in fact, a quit event.
 	return (event.type == ng.sdl2Enums.SDL_QUIT) or ((event.type == ng.sdl2Enums.SDL_WINDOWEVENT) and (event.window.event == ng.sdl2Enums.SDL_WINDOWEVENT_CLOSE))
 end
 
--- This is the main loop for app2d.
--- The application class is a function that returns a table of form:
--- {
---  function :event (event) -- Called on events.
---  function :frame () -- Called on every frame.
--- }
-
 function ng.app2d.main(appClass, frameTime)
+	--@: This is the main loop for app2d.
+	--@: The application class is a function that returns a table of form:
+	--@: {
+	--@:  function :event (event) -- Called on events.
+	--@:  function :frame () -- Called on every frame.
+	--@: }
 	ng.sdl2.SDL_Init(ng.sdl2Enums.SDL_INIT_TIMER + ng.sdl2Enums.SDL_INIT_VIDEO + ng.sdl2Enums.SDL_INIT_EVENTS)
 	ng.app2d.running = true
 

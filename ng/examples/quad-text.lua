@@ -1,6 +1,8 @@
+--@> ng.doc.command({}, nil)
+--@> DOC.target = "15-Examples-Complex"
 ng.module(
-	"examples.quad-text",
-	"examples.quad",
+	"ng.examples.quad-text",
+	"ng.examples.quad",
 	"ng.lib.app2d.text"
 )
 

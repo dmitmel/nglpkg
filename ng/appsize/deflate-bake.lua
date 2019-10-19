@@ -1,3 +1,4 @@
+--@> ng.doc.internal()
 ng.module(
 	"ng.appsize.deflate-bake",
 	"ng.lib.compress.deflate",

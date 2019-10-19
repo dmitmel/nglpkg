@@ -1,3 +1,4 @@
+--@> ng.doc.internal()
 ng.module(
 	"ng.lib.decompress.deflate.pure-lua",
 	"ng.lib.decompress.deflate.huffman",

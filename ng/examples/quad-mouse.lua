@@ -1,6 +1,8 @@
+--@> ng.doc.command({}, nil)
+--@> DOC.target = "15-Examples-Complex"
 ng.module(
-	"examples.quad-mouse",
-	"examples.quad"
+	"ng.examples.quad-mouse",
+	"ng.examples.quad"
 )
 
 -- Extends quad to add mouse support.

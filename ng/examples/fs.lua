@@ -1,5 +1,7 @@
+--@> ng.doc.command({}, nil)
+--@> DOC.target = "10-Examples-Simple"
 ng.module(
-	"examples.fs",
+	"ng.examples.fs",
 	"ng.wrap.fs"
 )
 

@@ -1,3 +1,5 @@
+--@> ng.doc.internal()
+--@: You really, really don't want to know.
 ng.module(
 	"ng.wrap.fs.the-windows-contingency",
 	"ng.lib.encoding.utf16",

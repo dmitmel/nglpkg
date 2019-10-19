@@ -37,6 +37,10 @@ Bakes a module tree. Expects standard output to be willing to accept some binary
 
 Same as the ordinary ng.bake, but more compatible with environments that don't like binary data on standard output.
 
+### sdk ng.doc.gen ng
+
+Generates a FODG file (OpenOffice Draw/LibreOffice Draw) in the local directory for the entirety of NGLPKG.
+
 ## How To Make A Buildscript
 
 You might be tempted to write a buildscript in your local shell language.

@@ -1,3 +1,4 @@
+--@> ng.doc.internal()
 ng.module(
 	"ng.resource.compiled-bake",
 	"ng.resource.runtime",

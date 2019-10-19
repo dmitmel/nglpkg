@@ -1,6 +1,8 @@
+--@> ng.doc.command({}, nil)
+--@> DOC.target = "15-Examples-Complex"
 ng.module(
-	"examples.quad-multi",
-	"examples.quad"
+	"ng.examples.quad-multi",
+	"ng.examples.quad"
 )
 
 -- Extends quad to add multiple windows.

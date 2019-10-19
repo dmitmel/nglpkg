@@ -1,3 +1,4 @@
+--@> ng.doc.internal()
 ng.module(
 	"ng.appsize.bdivide-bake",
 	"ng.lib.compress.bdivide",

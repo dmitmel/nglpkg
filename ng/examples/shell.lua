@@ -1,5 +1,7 @@
+--@> ng.doc.command({}, nil)
+--@> DOC.target = "10-Examples-Simple"
 ng.module(
-	"examples.shell"
+	"ng.examples.shell"
 )
 
 dump = function (a, indent)

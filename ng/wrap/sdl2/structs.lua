@@ -3,7 +3,7 @@ ng.module(
 	"ng.wrap.sdl2.base"
 )
 
---- SDL core structs (SDL_rwops, SDL_rect, SDL_pixels, SDL_surface) (heavily abridged)
+--@: SDL core structs (SDL_rwops, SDL_rect, SDL_pixels, SDL_surface) (heavily abridged)
 
 -- This has a surprisingly extensive rectangle library, but it's part-inlined.
 -- The interesting parts aren't, though!

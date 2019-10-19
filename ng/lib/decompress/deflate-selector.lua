@@ -1,3 +1,4 @@
+--@> ng.doc.internal()
 return function (modules)
 	if modules["ng.wrap.zlib"] then
 		return "ng.lib.decompress.deflate.zlib"

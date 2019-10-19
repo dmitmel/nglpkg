@@ -1,3 +1,7 @@
+--@: It's an HTTP client!
+--@: So you can download things.
+--@: Doesn't support HTTPS. Maybe another time.
+--@: API arguably non-final.
 ng.module(
 	"ng.lib.net.http-client",
 	"ng.wrap.luasocket-core",

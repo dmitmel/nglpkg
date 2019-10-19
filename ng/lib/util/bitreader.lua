@@ -1,3 +1,6 @@
+--@: This module is useful if handling bitstreams, i.e. data which isn't aligned to this weird concept some may refer to as "bytes".
+--@: In particular this is used by [[ng.lib.decompress.deflate.pure-lua]].
+--@: TODO: Actually document ng.BitReader API
 ng.module(
 	"ng.lib.util.bitreader",
 	"ng.wrap.ffi"
