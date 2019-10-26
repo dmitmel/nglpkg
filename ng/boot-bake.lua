@@ -109,7 +109,7 @@ ng.preprocessModule = function (name)
 				end
 				if l == "--PREPROCESSOR_HALT" then
 					table.insert(lines, ff:read("*a"))
-				else if not l:match("^%-%-") then
+				elseif not l:match("^%-%-") then
 					if l ~= "" then
 						table.insert(lines, l)
 					end
@@ -139,7 +139,7 @@ ng.bakeModule = function (mod)
 		return
 	end
 	-- Ok, we're definitely baking this module
-	ng.transpile(mod)
+	ng.transpiler(mod)
 	local rootlines = ng.preprocessModule(mod)
 	if not rootlines then
 		error("Missing module " .. mod)

@@ -39,7 +39,7 @@ ng = {
 			-- Also see boot-bake.lua
 			local fun = ng.optRequire(name .. "-selector")
 			if fun then
-				ng._import(fun(ng._modules), " (selected) " .. reason)
+				ng.dynamicImport(fun(ng._modules), " (selected) " .. reason)
 				ng._modules[name] = true
 			else
 				require(name)

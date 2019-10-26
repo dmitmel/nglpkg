@@ -19,6 +19,7 @@ function ng.transpiler(name)
 			f:close()
 			-- Ok, so it's a Haxe module. What do we do?
 			local dir, fn = ng.fs.dirname(place)
+			io.stderr:write("Compiling " .. name .. " with Haxe. If the haxelib 'nglpkg' library is missing, use 'haxelib dev nglpkg .' in the SDK directory.\n")
 			os.execute("haxe -C \"" .. dir .. "\" " .. fn)
 			-- Now modify it to make it a valid NGLPKG module
 			f = io.open(luaPlace, "rb")
