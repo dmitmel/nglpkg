@@ -28,7 +28,10 @@ do
 	else
 		-- Just a normal NG application testing lifecycle (regardless of if it's actually an NG module or not, see: ng.bake)
 		require("ng.boot")
+		-- Enable transpiling support
+		ng.dynamicImport("ng.lib.util.transpiler")
 		local program = table.remove(args, 1)
+
 		ng.args = args
 		-- This doesn't support -selector, nor should it support -selector
 		require(program)

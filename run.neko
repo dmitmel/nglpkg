@@ -1,0 +1,48 @@
+// Haxelib run scripts use NekoVM.
+// This is written in Neko for licensing reasons (no Haxe Standard Library)
+
+// std
+
+var args = $loader.args;
+var sdk = $loader.loadprim("std@get_cwd", 0)();
+var set_cwd = $loader.loadprim("std@set_cwd", 1);
+var sys_command = $loader.loadprim("std@sys_command", 1);
+var sys_exit = $loader.loadprim("std@sys_exit", 1);
+var sys_string = $loader.loadprim("std@sys_string", 0);
+var sys_exists = $loader.loadprim("std@sys_exists", 1);
+
+// Sequence
+
+if ($asize(args) != 1) {
+	$print("NGLPKG INTEGRATION HAXELIB INSTALLATION LAYER INPUT SCRIPT TECH\n");
+	$print(" version one 'follow the pettable rabbit'\n");
+	$print("For now, the run script installs the SDK, it doesn't use it\n");
+	$print("Come back when process_run has a 'do not redirect' option\n");
+	sys_exit(1);
+	$throw("return; generates invalid module");
+}
+
+$print("Installing NGLPKG SDK into: " + args[0] + "\n");
+
+// Use the "setup from remote location" method to lower the likelihood of a screwup here
+set_cwd(args[0]);
+
+var sdk_filename;
+var sdk_hint;
+if (sys_string() == "Windows") {
+	sdk_filename = "sdk.cmd";
+	sdk_hint = "sdk.cmd";
+	sys_command(sdk + "/setup.cmd");
+} else {
+	sdk_filename = "sdk";
+	sdk_hint = "./sdk";
+	sys_command(sdk + "/setup");
+}
+if ($not(sys_exists(sdk_filename))) {
+	$throw("NGLPKG SDK could not be installed automatically.\nPlease run the setup script for your system in the NGLPKG library directory.\nThen you can copy the resulting 'sdk' file (or 'sdk.cmd' on Windows) to your project.\nFailing this, you can understand how the system works from the files and create your own mechanism.");
+}
+$print("Installation complete.\n");
+$print("The SDK may now be invoked with '" + sdk_hint + "'.\n");
+$print("A Haxe module is assumed to have a .hxml file with it.\n");
+$print("In this case, the HXML file will be built when running or baking, and the module will be treated as a Haxe NGLPKG application.\n");
+

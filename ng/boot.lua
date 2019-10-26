@@ -33,7 +33,8 @@ ng = {
 		end
 		return res
 	end,
-	_import = function (name, reason)
+	dynamicImport = function (name, reason)
+		reason = reason or ""
 		if not ng._modules[name] then
 			-- Also see boot-bake.lua
 			local fun = ng.optRequire(name .. "-selector")
@@ -50,7 +51,7 @@ ng = {
 	end,
 	module = function (name, ...)
 		for _, dep in ipairs({...}) do
-			ng._import(dep, " needed by: " .. name)
+			ng.dynamicImport(dep, " needed by: " .. name)
 		end
 		ng._modules[name] = true
 	end,

@@ -1,0 +1,11 @@
+{
+	"name": "nglpkg",
+	"url": "https://gitlab.com/20kdc/nglpkg",
+	"license": "CC0",
+	"classPath": "hx",
+	"tags": ["lua", "luajit"],
+	"description": "Application deployment assistant (haxe port)",
+	"releasenote": "Initial base (Nothing wrapped yet, don't use!!!)",
+	"version": "0.0.1",
+	"contributors": ["20kdc"]
+}

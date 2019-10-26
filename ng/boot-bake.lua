@@ -6,6 +6,7 @@
 ng.module(
 	"ng.boot-bake",
 	"ng.lib.util.finder",
+	"ng.lib.util.transpiler",
 	"ng.atexit"
 )
 
@@ -106,7 +107,9 @@ ng.preprocessModule = function (name)
 				if l:sub(-1) == "\r" then
 					l = l:sub(1, -2)
 				end
-				if not l:match("^%-%-") then
+				if l == "--PREPROCESSOR_HALT" then
+					table.insert(lines, ff:read("*a"))
+				else if not l:match("^%-%-") then
 					if l ~= "" then
 						table.insert(lines, l)
 					end
@@ -135,17 +138,21 @@ ng.bakeModule = function (mod)
 		ng.bakeModules[mod] = true
 		return
 	end
+	-- Ok, we're definitely baking this module
+	ng.transpile(mod)
 	local rootlines = ng.preprocessModule(mod)
 	if not rootlines then
 		error("Missing module " .. mod)
 	end
 	local state = {}
-	while #rootlines > 0 do
-		if ng.bakingDirectives[rootlines[1]] then
-			local directive = table.remove(rootlines, 1)
+	
+	local cursor = 1
+	while cursor < #rootlines do
+		if ng.bakingDirectives[rootlines[cursor]] then
+			local directive = table.remove(rootlines, cursor)
 			local params = {}
 			while true do
-				local ln = table.remove(rootlines, 1)
+				local ln = table.remove(rootlines, cursor)
 				local str
 				if ln == ")" then
 					break
@@ -162,8 +169,7 @@ ng.bakeModule = function (mod)
 			end
 			ng.bakingDirectives[directive](state, params)
 		else
-			-- End of baking directives
-			break
+			cursor = cursor + 1
 		end
 	end
 	if mod ~= state.mod then
