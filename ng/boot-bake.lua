@@ -92,7 +92,7 @@ end
 
 ng.preprocessModule = function (name)
 	for _, fn in ipairs(ng.finder(name, ".lua")) do
-		local ff = io.open(fn, "r")
+		local ff = io.open(fn, "rb")
 		if ff then
 			local lines = {}
 			while true do
@@ -102,6 +102,9 @@ ng.preprocessModule = function (name)
 				end
 				while l:sub(1, 1) == " " or l:sub(1, 1) == "\t" do
 					l = l:sub(2)
+				end
+				if l:sub(-1) == "\r" then
+					l = l:sub(1, -2)
 				end
 				if not l:match("^%-%-") then
 					if l ~= "" then

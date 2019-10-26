@@ -7,13 +7,34 @@ ng.module(
 
 ng.fs = {}
 
+--@: ng.fs = {}
+
 pcall(require, "ng-fs-override")
 
--- fs.list(n) -> ({name...}) | (nil, error)
--- fs.mkdir(n) -> true/false
--- fs.rmdir(n) -> true/false
--- fs.unlink(n) -> true/false
--- fs.info(n) -> "directory"/"file"/nil
+--@: dirname(n) -> string (dir), string (name), root (boolean)
+function ng.fs.dirname(n)
+	-- 'root' case
+	if n:sub(2) == ":" or n:sub(2) == ":/" or n:sub(2) == ":\\" or n == "/" then return n, n, true end
+	--@: This tries to be more or less equivalent to the Unix "dirname"/"basename" pair, which eliminates trailing "/"
+	--@: However, unlike that, this supports backslash as separator.
+	n = n:reverse()
+	local whereA, whereB = n:find(".[\\/]+")
+	local base
+	if whereB then
+		base = n:sub(1, whereA):reverse()
+		n = n:sub(whereB + 1)
+	else
+		return ".", n:reverse()
+	end
+	return n:reverse(), base
+end
+
+--@:
+--@: list(n) -> ({name...}) | (nil, error)
+--@: mkdir(n) -> true/false
+--@: rmdir(n) -> true/false
+--@: unlink(n) -> true/false
+--@: info(n) -> "directory"/"file"/nil
 
 if (not ng.fs.list) and ffi.os == "Windows" then
 	local function xtend(a)

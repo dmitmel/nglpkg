@@ -167,7 +167,11 @@ do
 		table.insert(DOC.skeleton, DOC.module)
 		local f = io.open(fn, "rb")
 		for line in (f:read("*a") .. "\n"):gmatch("[^\n]*\n") do
-			DOC.lineHandler(line:sub(1, -2))
+			local lineP = line:sub(1, -2)
+			if lineP:sub(-1) == "\r" then
+				lineP = lineP:sub(1, -2)
+			end
+			DOC.lineHandler(lineP)
 		end
 		f:close()
 		if DOC.target then
