@@ -47,7 +47,7 @@ ffi.cdef[[
 		uint16_t format;
 		uint8_t channels;
 		uint8_t cSilence;
-		uint16_t cBufferFrames;
+		uint16_t bufferFrames;
 		uint16_t cPadding;
 		uint32_t cBufferBytes;
 		SDL_AudioCallback callback;
