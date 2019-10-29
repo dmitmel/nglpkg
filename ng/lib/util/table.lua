@@ -16,10 +16,21 @@ end
 
 --@: table.copy(tbl): Creates a shallow copy of the given table.
 --@:  Keys and values that point to other tables remain pointing to those other tables.
+--@:
 table.copy = function (tbl)
 	local ntbl = {}
 	for k, v in pairs(tbl) do
 		ntbl[k] = v
 	end
 	return ntbl
+end
+
+--@: table.indexOf(tbl, v): Gets the index of a table value (or nil if not found).
+--@:  Not limited to numerical tables.
+table.indexOf = function (tbl, v)
+	for tk, tv in pairs(tbl) do
+		if tv == v then
+			return tk
+		end
+	end
 end
