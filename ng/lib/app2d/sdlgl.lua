@@ -9,10 +9,11 @@ ng.module(
 	"ng.lib.util.cblists"
 )
 
--- This part inserts initialization/destruction for the Window itself, and also a utility function to invert the viewport transformation
+--@: This part manages a GL context for a app2d window. It should get refactored sometime.
+--@: Apart from the ng.app2d.invertViewport, you use it just by having it referenced somewhere, FOR NOW
+--@: API SUBJECT TO CHANGE
 
 do
-	ng.app2d.windowById = {}
 
 	local function updateSize()
 		local w = ng.app2d.current
@@ -34,23 +35,14 @@ do
 		local yD = (yWI / (w.height / 2)) - 1
 		return xD, yD
 	end
-	table.insert(ng.app2d.ctxInitializers, function (title, width, height, resizable)
+	table.insert(ng.app2d.ctxInitializers, function ()
 		local w = ng.app2d.current
-		local flags = ng.sdl2Enums.SDL_WINDOW_OPENGL
-		if resizable then
-			flags = flags + ng.sdl2Enums.SDL_WINDOW_RESIZABLE
-		end
-		w.window = ng.sdl2.SDL_CreateWindow(title, ng.sdl2Enums.SDL_WINDOWPOS_CENTRED, ng.sdl2Enums.SDL_WINDOWPOS_CENTRED, width, height, flags)
-		ng.app2d.windowById[ng.sdl2.SDL_GetWindowID(w.window)] = w
 		ng.sdl2.SDL_GL_ResetAttributes()
 		ng.sdl2.SDL_GL_SetAttribute(ng.sdl2Enums.SDL_GL_CONTEXT_MAJOR_VERSION, 2)
 		ng.sdl2.SDL_GL_SetAttribute(ng.sdl2Enums.SDL_GL_CONTEXT_MINOR_VERSION, 1)
 		w._glctx = ng.sdl2.SDL_GL_CreateContext(w.window)
 		w.gl = ng.createGL(ng.sdl2.SDL_GL_GetProcAddress)
 		updateSize()
-
-		w.gl.glEnable(w.gl.GL_BLEND)
-		w.gl.glBlendFunc(w.gl.GL_SRC_ALPHA, w.gl.GL_ONE_MINUS_SRC_ALPHA)
 	end)
 	table.insert(ng.app2d.ctxEnterers, function ()
 		local w = ng.app2d.current
@@ -59,8 +51,6 @@ do
 	table.insert(ng.app2d.ctxDestroyers, function ()
 		local w = ng.app2d.current
 		ng.sdl2.SDL_GL_DeleteContext(w._glctx)
-		ng.app2d.windowById[ng.sdl2.SDL_GetWindowID(w.window)] = nil
-		ng.sdl2.SDL_DestroyWindow(w.window)
 	end)
 	table.insert(ng.app2d.ctxFS, function ()
 		local w = ng.app2d.current

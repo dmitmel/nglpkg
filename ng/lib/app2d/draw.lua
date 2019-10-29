@@ -16,6 +16,10 @@ ng.resource(
 
 table.insert(ng.app2d.ctxInitializers, function ()
 	local w = ng.app2d.current
+
+	w.gl.glEnable(w.gl.GL_BLEND)
+	w.gl.glBlendFunc(w.gl.GL_SRC_ALPHA, w.gl.GL_ONE_MINUS_SRC_ALPHA)
+
 	local unsignedIntBuf = ffi.new("unsigned int[1]")
 	local rectBuf = ffi.new("float[8]",
 		0, 0,
