@@ -76,21 +76,27 @@ function ng.Worker()
 		return unpack(retvals)
 	end
 
-	--@: worker:extractValue(fntype, fnname): Extracts a C value (such as a closure). This is used in "shunting" workers into different threads via C closures.
-	function worker:extractValue(fntype, fnname)
-		local address = self:eval("local ffi = require(\"ffi\") local cbt = ffi.new(\"void*[1]\") cbt[0] = ffi.cast(\"" .. fntype .. "\", " .. fnname .. ") return ffi.string(cbt, ffi.sizeof(cbt))")
-		if not address then error("There was an unexpected issue with the extractor and nothing was extracted") end
-		return ffi.cast(fntype, ffi.cast("void**", address)[0])
+	--@: worker:extractValue(fntype, fttype, fnname): Extracts a C value. This is used in "shunting" workers into different threads via C closures.
+	--@:  fntype is the actual type, only ever used as-is.
+	--@:  fttype is the 'transfer type', which must be safe to suffix with [1] and *.
+	function worker:extractValue(fntype, fttype, fnname)
+		-- Create an extraction assistant
+		local value = self:eval("local ffi = require(\"ffi\") local cbt = ffi.new(\"" .. fttype .. "[1]\") cbt[0] = ffi.cast(\"" .. fntype .. "\", " .. fnname .. ") return ffi.string(cbt, " .. ffi.sizeof(fttype) .. ")")
+		if not value then error("There was an unexpected issue with the extractor and nothing was extracted") end
+		-- We have the content, now what?
+		return ffi.cast(fntype, ffi.cast(fttype .. "*", value)[0])
 	end
-	--@: worker:injectValue(fntype, fnname, val): Injects a C value.
-	function worker:injectValue(fntype, fnname, val)
+	--@: worker:injectValue(fntype, fttype, fnname, val): Injects a C value.
+	--@:  fntype is the actual type, only ever used as-is.
+	--@:  fttype is the 'transfer type', which must be safe to suffix with [1] and *.
+	function worker:injectValue(fntype, fttype, fnname, val)
 		-- Create an injection assistant
-		local array = ffi.new(fntype .. "[1]")
-		array[0] = val
+		local array = ffi.new(fttype .. "[1]")
+		array[0] = ffi.cast(fntype, val)
 		-- Turn the value into a string
 		local ptr = ffi.string(array, ffi.sizeof(fntype))
 		-- Convert the value back worker-side
-		self:eval("local ffi = require(\"ffi\") " .. fnname .. " = ffi.cast(\"" .. fntype .. "*\", ...)[0]", ptr)
+		self:eval("local ffi = require(\"ffi\") " .. fnname .. " = ffi.cast(\"" .. fntype .. "\", ffi.cast(\"" .. fttype .. "*\", ...)[0])", ptr)
 	end
 
 	--@: Threads
@@ -98,14 +104,13 @@ function ng.Worker()
 	--@:  After this, do not use any functions on the worker apart from :wait() which waits for the thread to halt.
 	function worker:launch(fnname, ptr, name)
 		name = name or "NGWorker"
-		local threadFn = self:extractValue("int (*)(void*)", fnname)
-		-- So that returned the worker callback...
-		state.thread = ng.sdl2.SDL_CreateThread(threadFn, name, ptr)
-		if not state.thread then
+		local threadFn = self:extractValue("int (*)(void*)", "void*", fnname)
+		self.thread = ng.sdl2.SDL_CreateThread(threadFn, name, ptr)
+		if not self.thread then
 			error("Failed to create thread.")
 		end
 	end
-	--@: worker:wait(live): Waits for the thread to halt. If it doesn't, you're screwed. If live is not true, the worker is automatically closed. Returns the returned number from the thread.
+	--@: worker:wait([live]): Waits for the thread to halt. If it doesn't, you're screwed. If live is not true, the worker is automatically closed. Returns the returned number from the thread.
 	function worker:wait(live)
 		local retVal = ffi.new("int[1]")
 		ng.sdl2.SDL_WaitThread(self.thread, retVal)
@@ -120,5 +125,6 @@ end
 function ng.newWorkerThread(code, ptr, name)
 	local worker = ng.Worker()
 	worker:openlibs()
-	return worker:launch("function (ptr) " .. code .. " end", ptr, name)
+	worker:launch("function (ptr) " .. code .. " end", ptr, name)
+	return worker
 end

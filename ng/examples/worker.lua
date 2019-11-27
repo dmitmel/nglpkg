@@ -5,13 +5,22 @@
 ng.module(
 	"ng.examples.worker",
 	"ng.lib.worker",
-	"ng.wrap.ffi"
+	"ng.wrap.ffi",
+	"ng.wrap.sdl2.thread"
 )
 
-local ptr = ffi.new("int[1]")
+local ptr = ffi.new("int[2]")
 
-ng.newWorkerThread("ptr = ffi.cast(\"int*\", ptr) while true do ptr[0] = ptr[0] + 1 end", ptr)
+-- Note the use of atomics. The loop will be infinite otherwise.
+local worker = ng.newWorkerThread("local sdl2 = ffi.load(\"SDL2\") ffi.cdef[[" .. ng.sdl2Atomics .. "]] ptr = ffi.cast(\"int*\", ptr) while sdl2.SDL_AtomicGet(ptr + 1) == 0 do ptr[0] = ptr[0] + 1 end return 0", ptr)
 
-while true do
-	print("at " .. ptr[0])
-end
+-- It is expected that the process will be interrupted during the loop. Allowing this to turn into an error will crash things.
+pcall(function ()
+	while true do
+		print("at " .. ptr[0])
+	end
+end)
+
+ng.sdl2.SDL_AtomicSet(ptr + 1, 1)
+
+worker:wait()
