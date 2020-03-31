@@ -165,10 +165,17 @@ ng.deflateHuffman.deflateDynamic = function (bs, flsb)
 		metalens[metalensi[i]] = bs.getIntField(3, flsb)
 	end
 	local metatree = ng.deflateHuffman.lclBits(0, 18, metalens, 7)
+
+	local alllens = {}
+	ng.deflateHuffman.deflateDynamicSubcodes(alllens, ltl + dst, metatree, bs, flsb)
 	local litlens = {}
 	local distlens = {}
-	ng.deflateHuffman.deflateDynamicSubcodes(litlens, ltl, metatree, bs, flsb)
-	ng.deflateHuffman.deflateDynamicSubcodes(distlens, dst, metatree, bs, flsb)
+	for i = 0, ltl - 1 do
+		litlens[i] = alllens[i]
+	end
+	for i = 0, dst - 1 do
+		distlens[i] = alllens[ltl + i]
+	end
 	local littree = ng.deflateHuffman.lclBits(0, ltl - 1, litlens, 15)
 	local dsttree = ng.deflateHuffman.lclBits(0, dst - 1, distlens, 15)
 	return littree, dsttree
